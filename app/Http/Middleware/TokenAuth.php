@@ -21,21 +21,48 @@ class TokenAuth  extends BaseMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if($guard != null) {
-            auth()->shouldUse($guard);
-            try {
-                if (!$admin = Auth::guard($guard)->user()) {
+        auth()->shouldUse($guard == null ? 'admin-api' : $guard);
+        try 
+        {
+            if (!$user = Auth::guard($guard == null ? 'admin-api' : $guard)->user()) 
+            {
+                if($guard == null) 
+                {
+                    auth()->shouldUse('user-api');
+                    if (!$user = Auth::guard('user-api')->user())
+                    {
+                        throw new JWTException('UnAuthenticated', 403);
+                    }
+                    else
+                    {
+                        $guard = 'user-api';
+                    }
+                }
+                else
+                {
                     throw new JWTException('UnAuthenticated', 403);
                 }
-            } 
-            catch (TokenExpiredException $e) {
-                return $this->makeResponse("Failed",  $e->getCode(), $e->getMessage());
             }
-            catch (JWTException $e) {
-                return $this->makeResponse("Failed",  $e->getCode(), $e->getMessage());
+            else
+            {
+                if ($guard == null) 
+                {
+                    $guard = 'admin-api';
+                }
             }
+        } 
+        catch (TokenExpiredException $e) 
+        {
+            return $this->makeResponse("Failed",  $e->getCode(), $e->getMessage());
         }
-        $request->request->add(['admin_id' => $admin['id']]);
+        catch (JWTException $e) 
+        {
+            return $this->makeResponse("Failed",  $e->getCode(), $e->getMessage());
+        }
+        $request->request->add([
+            $guard == 'admin-api' ? 'admin_id' : 'user_id' => $user['id'],
+            'guard' => $guard
+        ]);
         return $next($request);
     }
 }

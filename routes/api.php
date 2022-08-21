@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,3 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::controller(AuthController::class)->group(function ()
+{
+    Route::middleware(['tokenAuth'])->group(function () 
+    {
+        Route::get('profile', 'me');
+        Route::get('refresh-token', 'refresh');
+        Route::get('logout', 'logout');
+    });
+});

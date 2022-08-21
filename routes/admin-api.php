@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\SocialMediaController;
 
@@ -16,12 +16,7 @@ use App\Http\Controllers\Admin\SocialMediaController;
 |
 */
 
-Route::controller(AuthController::class)->group(function ()
-{
-    Route::post('login', 'login');
-    Route::get('profile', 'me');
-    Route::get('logout', 'logout');
-});
+Route::post('login', [AuthController::class, 'login']);
 
 Route::controller(DepartmentController::class)->group(function ()
 {

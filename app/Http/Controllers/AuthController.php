@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use Exception;
+use Illuminate\Http\Request;
 use App\Traits\GeneralFunctions;
 use App\Http\Requests\AuthRequest;
 use App\Http\Controllers\Controller;
@@ -18,7 +19,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('tokenAuth:admin-api', ['except' => ['login']]);
+        
     }
 
     /**
@@ -30,15 +31,16 @@ class AuthController extends Controller
     {
         try 
         {
+            $guard = $request->path() == 'admin/api/login' ? 'admin-api' : 'user-api';
             $credentials = $request->only(['userName', 'password']);
-            $token = Auth::guard('admin-api')->attempt($credentials);
+            $token = Auth::guard($guard)->attempt($credentials);
             if (!$token)
                 return $this->makeResponse('Failed', 403, "Access Denied");
-            return $this->makeResponse('Success', 200, "Access Granted", array('Token' => 'Bearer ' . $token, 'type' => 'Admin'));
+            return $this->makeResponse('Success', 200, "Access Granted", array('Token' => 'Bearer ' . $token, 'Type' => $guard == 'admin-api' ? 'Admin' : 'Client'));
         } 
         catch (Exception $e) 
         {
-            return $this->makeResponse('Success', $e->getCode(), $e->getMessage());
+            return $this->makeResponse('Failed', $e->getCode(), $e->getMessage());
         }
     }
 
@@ -47,18 +49,19 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me(Request $request)
     {
         try 
         {
-            $admin = Auth::guard('admin-api')->user();
-            return $this->makeResponse('Success', 200, "This Is Your Profile Data", array('name' => $admin['name'], 'userName' => $admin['userName']));
+            $user = Auth::guard($request->guard)->user();
+            return $this->makeResponse('Success', 200, "This Is Your Profile Data", array('name' => $user['name'], 'userName' => $user['userName']));
         }
         catch (Exception $e) 
         {
-            return $this->makeResponse('Success', $e->getCode(), $e->getMessage());
+            return $this->makeResponse('Failed', $e->getCode(), $e->getMessage());
         }
     }
+
     /**
      * Log the user out (Invalidate the token).
      *
@@ -73,7 +76,7 @@ class AuthController extends Controller
         } 
         catch (Exception $e) 
         {
-            return $this->makeResponse('Success', $e->getCode(), $e->getMessage());
+            return $this->makeResponse('Failed', $e->getCode(), $e->getMessage());
         }
     }
 
@@ -82,8 +85,8 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh()
+    public function refresh(Request $request)
     {
-        // return auth()->refresh();
+        return $this->makeResponse('Success', 200, "Token Has Refreshed Successfully", array('Token' => 'Bearer ' . Auth::refresh(), 'Type' => $request->guard == 'admin-api' ? 'Admin' : 'Client'));
     }
 }
