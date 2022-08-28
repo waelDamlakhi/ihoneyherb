@@ -32,9 +32,12 @@ trait GeneralFunctions {
     {
         $file = $request->file($inputName);
         $fileName = Time() . "_" . $file->getClientOriginalName();
-        $folderPath = public_path('images');
+        $folderPath = public_path('images'); 
         $file->move($folderPath, $fileName);
-        return $folderPath . '\\' . $fileName;
+        return [
+            "imageUrl" => env('APP_URL') . '/public/images/' . $fileName,
+            "imagePath" => $folderPath . '\\' . $fileName
+        ];
     }
 
 }

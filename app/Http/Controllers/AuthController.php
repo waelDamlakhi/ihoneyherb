@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Traits\GeneralFunctions;
 use App\Http\Requests\AuthRequest;
 use App\Http\Controllers\Controller;
+use App\Models\Address;
+use App\Models\Phone;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -37,6 +40,30 @@ class AuthController extends Controller
             if (!$token)
                 return $this->makeResponse('Failed', 403, "Access Denied");
             return $this->makeResponse('Success', 200, "Access Granted", array('Token' => 'Bearer ' . $token, 'Type' => $guard == 'admin-api' ? 'Admin' : 'Client'));
+        } 
+        catch (Exception $e) 
+        {
+            return $this->makeResponse('Failed', $e->getCode(), $e->getMessage());
+        }
+    }
+
+    /**
+     * Create A New User Account.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(AuthRequest $request)
+    {
+        try 
+        {
+            $credentials = $request->only(['userName', 'password']);
+            $request->merge(['password' => bcrypt($request->password)]);
+            $user = User::create($request->all());
+            $request->request->add(['user_id' => $user->id, 'type' => 'default']);
+            Phone::create($request->request->all());
+            Address::create($request->request->all());
+            $token = Auth::guard('user-api')->attempt($credentials);
+            return $this->makeResponse('Success', 200, "Access Granted", array('Token' => 'Bearer ' . $token, 'Type' => 'Client'));
         } 
         catch (Exception $e) 
         {

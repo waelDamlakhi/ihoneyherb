@@ -30,8 +30,7 @@ class DepartmentController extends Controller
     {
         try 
         {
-            $filepath = $this->uploadFiles($request);
-            $request->request->add(['image' => $filepath]);
+            $request->request->add($this->uploadFiles($request));
             Department::create($request->all());
             return $this->makeResponse("Success", 200, "Department Added Successfully");
         }
@@ -50,7 +49,7 @@ class DepartmentController extends Controller
     {
         try 
         {
-            $departments = Department::select('id')->where('department_id', null)->get();
+            $departments = Department::select('id')->where('department_id', null)->whereDoesntHave('products')->get();
             foreach ($departments as $department)
                 $department->makeHidden('translations');
             return $this->makeResponse("Success", 200, "This All Primary Departments", $departments);
@@ -128,9 +127,8 @@ class DepartmentController extends Controller
             $department = Department::find($request->id);
             if (!empty($request->file('photo'))) 
             {
-                unlink($department->image);
-                $filepath = $this->uploadFiles($request);
-                $request->request->add(['image' => $filepath]);
+                unlink($department->imagePath);
+                $request->request->add($this->uploadFiles($request));
             }
             $department->update($request->all());
             return $this->makeResponse("Success", 200, "Department Updated Successfully");
@@ -151,14 +149,8 @@ class DepartmentController extends Controller
         try 
         {
             $department = Department::with('products')->find($request->id);
-            unlink($department->image);
-            if (COUNT($department->prducts) > 0) 
-            {
-                foreach ($department->prducts as $product) 
-                {
-                    unlink($product->image);
-                }
-            }
+            unlink($department->imagePath);
+            $department->deleteTranslations();
             $department->delete();
             return $this->makeResponse("Success", 200, "Department Deleted Successfully");
         }

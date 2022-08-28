@@ -18,7 +18,8 @@ class CreateSocialMediaTable extends Migration
             $table->foreignId('admin_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->enum('type', ['tel', 'email', 'application']);
             $table->string('info');
-            $table->string('image')->nullable();
+            $table->string('imageUrl');
+            $table->string('imagePath');
         });
     }
 

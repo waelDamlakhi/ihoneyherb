@@ -19,11 +19,13 @@ class SocialMedia extends Model
     protected $fillable = [
         'type',
         'info',
-        'image',
+        'imageUrl', 
+        'imagePath', 
         'admin_id',
     ];
     protected $hidden = [
-        'admin_id'
+        'admin_id',
+        'imagePath'
     ];
 
     /**

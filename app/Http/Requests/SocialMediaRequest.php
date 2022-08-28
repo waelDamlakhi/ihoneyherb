@@ -58,6 +58,51 @@ class SocialMediaRequest extends FormRequest
         return $rules;
     }
     
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return app()->getLocale() == 'en' ? 
+        [
+            'id.required' => 'The Id Field Is Required.',
+            'id.integer' => 'The Id Must Be a Integer.',
+            'id.exists' => 'This Id Is Invalid.',
+            'photo.mimetypes' => 'The Photo Extension Must Be One Of These (jpg, jpeg, png).',
+            'photo.required' => 'The Social Media Photo Field Is Required.',
+            'type.required' => 'The Social Media Type Field Is Required.',
+            'type.string' => 'The Social Media Type Must Be a String.',
+            'type.in' => 'The Social Media Type Must Be One Of These (tel, email, application).',
+            'info.required' => 'The Social Media Field Is Required.',
+            'info.numeric' => 'The Social Media Must Be a Numeric.',
+            'info.email' => 'The Social Media Must Be a Email Address.',
+            'info.string' => 'The Social Media Must Be a String.',
+            'info.unique' => 'The Social Media Has Already Been Taken.'
+        ] : 
+        [
+            'id.required' => 'رقم المعرف مطلوب.',
+            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقمي.',
+            'id.exists' => 'هذا الرقم غير صحيح.',
+            'photo.mimetypes' => ' .(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
+            'photo.required' => 'صورة وسيلة التواصل مطلوبة.',
+            'type.required' => 'نوع وسيلة التواصل مطلوب.',
+            'type.string' => 'يجب أن يكون نوع وسيلة التواصل من نوع نصي.',
+            'type.in' => 'يجب أن يكون نوع وسيلة التواصل احدى هذه الأنواع (هاتف, بريد الكتروني, تطبيق).',
+            'info.required' => 'وسيلة التواصل مطلوبة.',
+            'info.numeric' => 'يجب أن تكون وسيلة التواصل من نوع رقمي.',
+            'info.email' => 'يجب أن تكون وسيلة التواصل من نوع بريد الكتروني.',
+            'info.string' => 'يجب أن تكون وسيلة التواصل من نوع نصي.',
+            'info.unique' => 'وسيلة التواصل موجودة مسبقا'
+        ];
+    }
+
+    /**
+     * Return Validation Error Messages.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function failedValidation(Validator $validator)
     {
         $response = $this->makeResponse("Failed", 422, "InVailed Inputs", $validator->errors());

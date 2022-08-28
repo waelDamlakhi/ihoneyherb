@@ -30,8 +30,7 @@ class SocialMediaController extends Controller
     {
         try 
         {
-            $filepath = $this->uploadFiles($request);
-            $request->request->add(['image' => $filepath]);
+            $request->request->add($this->uploadFiles($request));
             SocialMedia::create($request->all());
             return $this->makeResponse("Success", 200, "Social Media Added Successfully");
         }
@@ -96,9 +95,8 @@ class SocialMediaController extends Controller
             $socialMedia = SocialMedia::find($request->id);
             if (!empty($request->file('photo'))) 
             {
-                unlink($socialMedia->image);
-                $filepath = $this->uploadFiles($request);
-                $request->request->add(['image' => $filepath]);
+                unlink($socialMedia->imagePath);
+                $request->request->add($this->uploadFiles($request));
             }
             $socialMedia->update($request->all());
             return $this->makeResponse("Success", 200, "Social Media Updated Successfully");
@@ -119,7 +117,8 @@ class SocialMediaController extends Controller
         try 
         {
             $socialMedia = SocialMedia::find($request->id);
-            unlink($socialMedia->image);
+            unlink($socialMedia->imagePath);
+            $socialMedia->deleteTranslations();
             $socialMedia->delete();
             return $this->makeResponse("Success", 200, "Social Media Deleted Successfully");
         }

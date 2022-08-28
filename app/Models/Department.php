@@ -20,13 +20,15 @@ class Department extends Model implements TranslatableContract
      * @var array<int, string>
      */
     protected $fillable = [
-        'image', 
+        'imageUrl', 
+        'imagePath', 
         'admin_id', 
         'department_id'
     ];
     protected $hidden = [
         'admin_id', 
         'department_id',
+        'imagePath'
     ];
     public $translatedAttributes = ['name'];
     

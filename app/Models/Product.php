@@ -24,8 +24,10 @@ class Product extends Model implements TranslatableContract
         'SAR',
         'quantity',
         'discount',
-        'image',
-        'banner',
+        'imageUrl', 
+        'imagePath', 
+        'bannerUrl',
+        'bannerPath',
         'show_in',
         'admin_id',
         'department_id',
@@ -34,6 +36,8 @@ class Product extends Model implements TranslatableContract
         'name',
         'unit',
         'description',
+        'bannerPath',
+        'imagePath'
     ];
     
     /**
