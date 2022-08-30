@@ -99,7 +99,7 @@ class SocialMediaController extends Controller
                 $request->request->add($this->uploadFiles($request));
             }
             $socialMedia->update($request->all());
-            return $this->makeResponse("Success", 200, "Social Media Updated Successfully");
+            return $this->makeResponse("Success", 200, "Social Media Updated Successfully", $socialMedia);
         }
         catch (Exception $e) 
         {

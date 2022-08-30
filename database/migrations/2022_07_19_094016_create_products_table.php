@@ -15,8 +15,8 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('department_id')->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('admin_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
             $table->float('AED', 8, 2);
             $table->float('USD', 8, 2);
             $table->float('SAR', 8, 2);

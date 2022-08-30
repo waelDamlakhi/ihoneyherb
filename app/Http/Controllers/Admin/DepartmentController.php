@@ -124,14 +124,22 @@ class DepartmentController extends Controller
     {
         try 
         {
-            $department = Department::find($request->id);
+            $department = Department::with(
+                [
+                    'parent' => function ($primaryDepartment) 
+                    {
+                        $primaryDepartment->select('id');
+                    }
+                ]
+            )->find($request->id);
+            $department->parent->makeHidden('translations');
             if (!empty($request->file('photo'))) 
             {
                 unlink($department->imagePath);
                 $request->request->add($this->uploadFiles($request));
             }
             $department->update($request->all());
-            return $this->makeResponse("Success", 200, "Department Updated Successfully");
+            return $this->makeResponse("Success", 200, "Department Updated Successfully", $department);
         }
         catch (Exception $e) 
         {

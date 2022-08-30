@@ -15,8 +15,8 @@ class CreateQuantityAdjustmentsTable extends Migration
     {
         Schema::create('quantity_adjustments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('admin_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('product_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('admin_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->integer('quantity');
             $table->enum('operation_type', ['in', 'out']);
             $table->text('description');

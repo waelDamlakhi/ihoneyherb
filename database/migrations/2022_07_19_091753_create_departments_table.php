@@ -15,8 +15,8 @@ class CreateDepartmentsTable extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('department_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
-            $table->foreignId('admin_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
+            $table->foreignId('admin_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('imageUrl');
             $table->string('imagePath');
         });
