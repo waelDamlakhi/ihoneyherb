@@ -20,13 +20,12 @@ class CreateProductsTable extends Migration
             $table->float('AED', 8, 2);
             $table->float('USD', 8, 2);
             $table->float('SAR', 8, 2);
-            $table->integer('quantity');
-            $table->float('discount', 3, 2);
+            // $table->integer('quantity');
             $table->string('imageUrl');
             $table->string('imagePath');
             $table->string('bannerUrl');
             $table->string('bannerPath');
-            $table->string('show_in');
+            $table->string('show_in')->nullable();
         });
     }
 

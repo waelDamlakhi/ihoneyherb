@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SocialMediaController;
 
 /*
@@ -26,6 +27,16 @@ Route::controller(DepartmentController::class)->group(function ()
     Route::post('update-department', 'update');
     Route::delete('delete-department', 'delete');
     Route::get('primary-departments', 'getPrimaryDepartments');
+});
+
+Route::controller(ProductController::class)->group(function ()
+{
+    Route::post('create-product', 'create');
+    // Route::get('departments', 'read');
+    // Route::get('edit-department', 'edit');
+    // Route::post('update-department', 'update');
+    // Route::delete('delete-department', 'delete');
+    // Route::get('primary-departments', 'getPrimaryDepartments');
 });
 
 Route::controller(SocialMediaController::class)->group(function ()

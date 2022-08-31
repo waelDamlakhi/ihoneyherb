@@ -106,7 +106,11 @@ class DepartmentController extends Controller
                     }
                 ]
             )->find($request->id);
-            $department->parent->makeHidden('translations');
+            if (COUNT($department->children) > 0)
+                $department->hasChildren = true;
+            else
+                $department->hasChildren = false;
+                $department->makeHidden('children');
             return $this->makeResponse("Success", 200, "This Is Department Data", $department);
         }
         catch (Exception $e) 
