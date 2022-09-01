@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\Product;
+use App\Models\QuantityAdjustments;
 use App\Traits\GeneralFunctions;
 use Exception;
 
@@ -21,7 +23,7 @@ class ProductController extends Controller
     }
     
     /**
-     * Create A New Department.
+     * Create A New Product.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -29,9 +31,19 @@ class ProductController extends Controller
     {
         try 
         {
-            // $request->request->add($this->uploadFiles($request));
-            // Department::create($request->all());
-            return $this->makeResponse("Success", 200, "Department Added Successfully");
+            $request->request->add(array_merge(
+                [
+                    'USD' => (float) number_format($request->AED / 3.66, 2),
+                    'SAR' => $request->AED * 9.5,
+                    'operation_type' => 'in',
+                ], 
+                $this->uploadFiles($request), 
+                $this->uploadFiles($request, 'banner', 'bannerUrl', 'bannerPath')
+            ));
+            $product = Product::create($request->all());
+            $request->request->add(['product_id' => $product->id, 'description' => 'بداية الكمية']);
+            QuantityAdjustments::create($request->all());
+            return $this->makeResponse("Success", 200, "Product Added Successfully");
         }
         catch (Exception $e) 
         {

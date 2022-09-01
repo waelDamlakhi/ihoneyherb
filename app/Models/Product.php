@@ -22,8 +22,6 @@ class Product extends Model implements TranslatableContract
         'AED',
         'USD',
         'SAR',
-        'quantity',
-        'discount',
         'imageUrl', 
         'imagePath', 
         'bannerUrl',
@@ -36,8 +34,6 @@ class Product extends Model implements TranslatableContract
         'name',
         'unit',
         'description',
-        'bannerPath',
-        'imagePath'
     ];
     
     /**

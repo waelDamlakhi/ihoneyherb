@@ -30,6 +30,7 @@ class ProductRequest extends FormRequest
     {
         $rules = [
             'AED' => 'required|numeric',
+            'quantity' => 'required|numeric',
             'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
             'banner' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
             'department_id' => 'nullable|integer|exists:departments,id',

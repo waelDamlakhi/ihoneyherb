@@ -28,15 +28,15 @@ trait GeneralFunctions {
         **** Function Upload Files To The Server ****
         *********************************************
     */
-    public function uploadFiles(Request $request, $inputName = 'photo')
+    public function uploadFiles(Request $request, $inputName = 'photo', $fileUrl = 'imageUrl', $filePath = 'imagePath')
     {
         $file = $request->file($inputName);
         $fileName = Time() . "_" . $file->getClientOriginalName();
         $folderPath = public_path('images'); 
         $file->move($folderPath, $fileName);
         return [
-            "imageUrl" => env('APP_URL') . '/public/images/' . $fileName,
-            "imagePath" => $folderPath . '\\' . $fileName
+            $fileUrl => env('APP_URL') . '/public/images/' . $fileName,
+            $filePath => $folderPath . '\\' . $fileName
         ];
     }
 

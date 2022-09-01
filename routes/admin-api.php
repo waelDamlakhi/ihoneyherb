@@ -27,6 +27,7 @@ Route::controller(DepartmentController::class)->group(function ()
     Route::post('update-department', 'update');
     Route::delete('delete-department', 'delete');
     Route::get('primary-departments', 'getPrimaryDepartments');
+    Route::get('departments-for-products', 'getDepartmentsForProduct');
 });
 
 Route::controller(ProductController::class)->group(function ()
