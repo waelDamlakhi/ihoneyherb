@@ -23,11 +23,24 @@ class QuantityAdjustments extends Model
         'admin_id',
     ];
     
+    protected $hidden = [
+        'product_id',
+        'admin_id'
+    ];
+
     /**
      * Get the Admin that owns the Quantity Adjustments.
      */
     public function admin()
     {
         return $this->belongsTo(Admin::class);
+    }
+    
+    /**
+     * Get the Product that owns the Quantity Adjustments.
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

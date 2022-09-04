@@ -33,10 +33,10 @@ Route::controller(DepartmentController::class)->group(function ()
 Route::controller(ProductController::class)->group(function ()
 {
     Route::post('create-product', 'create');
-    // Route::get('departments', 'read');
-    // Route::get('edit-department', 'edit');
-    // Route::post('update-department', 'update');
-    // Route::delete('delete-department', 'delete');
+    Route::get('products', 'read');
+    Route::get('edit-product', 'edit');
+    Route::post('update-product', 'update');
+    Route::delete('delete-product', 'delete');
     // Route::get('primary-departments', 'getPrimaryDepartments');
 });
 

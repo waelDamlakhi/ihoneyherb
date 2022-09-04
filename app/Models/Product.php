@@ -22,6 +22,7 @@ class Product extends Model implements TranslatableContract
         'AED',
         'USD',
         'SAR',
+        'quantity',
         'imageUrl', 
         'imagePath', 
         'bannerUrl',
@@ -36,6 +37,13 @@ class Product extends Model implements TranslatableContract
         'description',
     ];
     
+    protected $hidden = [
+        'admin_id', 
+        'department_id',
+        'imagePath',
+        'bannerPath'
+    ];
+
     /**
      * Get the Admin that owns the Products.
      */
@@ -72,5 +80,21 @@ class Product extends Model implements TranslatableContract
             'price',
             'quantity',
         ])->as('product_order');
+    }
+    
+    /**
+     * Get the Product Orders for the Product.
+     */
+    public function product_orders()
+    {
+        return $this->hasMany(ProductOrder::class);
+    }
+    
+    /**
+     * Get the Quantity Adjustments for the Product.
+     */
+    public function quantity()
+    {
+        return $this->hasMany(QuantityAdjustments::class);
     }
 }

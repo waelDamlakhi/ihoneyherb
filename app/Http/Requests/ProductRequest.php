@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Traits\GeneralFunctions;
+use Illuminate\Support\Str;
 
 class ProductRequest extends FormRequest
 {
@@ -28,23 +29,39 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'AED' => 'required|numeric',
-            'quantity' => 'required|numeric',
-            'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
-            'banner' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
-            'department_id' => 'nullable|integer|exists:departments,id',
-        ];
-        foreach (config('translatable.locales') as $lang) 
+        if (Str::contains($this->path(), 'delete-product') || Str::contains($this->path(), 'edit-product')) 
+        {
+            $rules['id'] = 'required|integer|exists:products,id';
+        }
+        else
+        {
+            if (Str::contains($this->path(), 'update-product'))
+                $rules = [
+                    'id' => 'required|integer|exists:products,id',
+                    'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png',
+                    'banner' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png'
+                ];
+            else
+                $rules = [
+                    'quantity' => 'required|numeric',
+                    'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
+                    'banner' => 'required|mimetypes:image/jpg,image/jpeg,image/png'
+                ];
             $rules += [
-                $lang . ".name" => [
-                    'required',
-                    'string',
-                    Rule::unique('product_translations', 'name')->ignore($this->id, 'department_id')
-                ],
-                $lang . ".unit" => 'required|string',
-                $lang . ".description" => 'required|string'
+                'AED' => 'required|numeric',
+                'department_id' => 'nullable|integer|exists:departments,id'
             ];
+            foreach (config('translatable.locales') as $lang) 
+                $rules += [
+                    $lang . ".name" => [
+                        'required',
+                        'string',
+                        Rule::unique('product_translations', 'name')->ignore($this->id, 'product_id')
+                    ],
+                    $lang . ".unit" => 'required|string',
+                    $lang . ".description" => 'required|string'
+                ];
+        }
         return $rules;
     }
     

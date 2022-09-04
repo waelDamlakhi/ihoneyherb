@@ -101,6 +101,14 @@ class DepartmentController extends Controller
                     }
                 ]
             )->get();
+            foreach ($departments as $department) 
+            {
+                if (COUNT($department->children) > 0)
+                    $department->hasChildren = true;
+                else
+                    $department->hasChildren = false;
+                $department->makeHidden('children');
+            }
             return $this->makeResponse("Success", 200, "This All Departments", $departments);
         }
         catch (Exception $e) 
@@ -130,7 +138,7 @@ class DepartmentController extends Controller
                 $department->hasChildren = true;
             else
                 $department->hasChildren = false;
-                $department->makeHidden('children');
+            $department->makeHidden('children');
             return $this->makeResponse("Success", 200, "This Is Department Data", $department);
         }
         catch (Exception $e) 
