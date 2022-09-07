@@ -30,7 +30,7 @@ class DepartmentController extends Controller
     {
         try 
         {
-            $request->request->add($this->uploadFiles($request));
+            $request->request->add($this->uploadFiles($request->file('photo')));
             Department::create($request->all());
             return $this->makeResponse("Success", 200, "Department Added Successfully");
         }
@@ -167,7 +167,7 @@ class DepartmentController extends Controller
             if (!empty($request->file('photo'))) 
             {
                 unlink($department->imagePath);
-                $request->request->add($this->uploadFiles($request));
+                $request->request->add($this->uploadFiles($request->file('photo')));
             }
             $department->update($request->all());
             $department = $department->fresh(

@@ -28,10 +28,9 @@ trait GeneralFunctions {
         **** Function Upload Files To The Server ****
         *********************************************
     */
-    public function uploadFiles(Request $request, $inputName = 'photo', $fileUrl = 'imageUrl', $filePath = 'imagePath')
+    public function uploadFiles($file, $fileUrl = 'imageUrl', $filePath = 'imagePath')
     {
-        $file = $request->file($inputName);
-        $fileName = Time() . "_" . $file->getClientOriginalName();
+        $fileName = Time() + rand() . "_" . $file->getClientOriginalName();
         $folderPath = public_path('images'); 
         $file->move($folderPath, $fileName);
         return [

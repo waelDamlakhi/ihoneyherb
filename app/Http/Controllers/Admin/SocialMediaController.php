@@ -30,7 +30,7 @@ class SocialMediaController extends Controller
     {
         try 
         {
-            $request->request->add($this->uploadFiles($request));
+            $request->request->add($request->hasFile('photo') ? $this->uploadFiles($request->file('photo')) : ['imageUrl' => $request->photoUrl]);
             SocialMedia::create($request->all());
             return $this->makeResponse("Success", 200, "Social Media Added Successfully");
         }
@@ -93,10 +93,21 @@ class SocialMediaController extends Controller
         try 
         {
             $socialMedia = SocialMedia::find($request->id);
-            if (!empty($request->file('photo'))) 
+            if (!empty($request->photoUrl)) 
             {
-                unlink($socialMedia->imagePath);
-                $request->request->add($this->uploadFiles($request));
+                if ($socialMedia->imagePath != null) 
+                {
+                    unlink($socialMedia->imagePath);
+                }
+                $request->request->add(['iamgeUrl' => $request->photoUrl, 'imagePath' => null]);
+            }
+            elseif (!empty($request->file('photo'))) 
+            {
+                if ($socialMedia->imagePath != null) 
+                {
+                    unlink($socialMedia->imagePath);
+                }
+                $request->request->add($this->uploadFiles($request->file('photo')));
             }
             $socialMedia->update($request->all());
             return $this->makeResponse("Success", 200, "Social Media Updated Successfully", $socialMedia);
@@ -117,8 +128,10 @@ class SocialMediaController extends Controller
         try 
         {
             $socialMedia = SocialMedia::find($request->id);
-            unlink($socialMedia->imagePath);
-            $socialMedia->deleteTranslations();
+            if ($socialMedia->imagePath != null) 
+            {
+                unlink($socialMedia->imagePath);
+            }
             $socialMedia->delete();
             return $this->makeResponse("Success", 200, "Social Media Deleted Successfully");
         }

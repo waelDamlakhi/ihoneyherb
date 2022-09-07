@@ -23,9 +23,6 @@ class CreateProductsTable extends Migration
             $table->integer('quantity');
             $table->string('imageUrl');
             $table->string('imagePath');
-            $table->string('bannerUrl');
-            $table->string('bannerPath');
-            $table->string('show_in')->nullable();
         });
     }
 

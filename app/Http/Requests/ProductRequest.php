@@ -33,20 +33,28 @@ class ProductRequest extends FormRequest
         {
             $rules['id'] = 'required|integer|exists:products,id';
         }
+        elseif (Str::contains($this->path(), 'update-product-pictures')) 
+        {
+            $rules = [
+                'id' => 'required|integer|exists:product_pictures,id',
+                'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
+            ];
+        }
         else
         {
             if (Str::contains($this->path(), 'update-product'))
                 $rules = [
                     'id' => 'required|integer|exists:products,id',
                     'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png',
-                    'banner' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png'
                 ];
             else
+            {
                 $rules = [
                     'quantity' => 'required|numeric',
                     'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
-                    'banner' => 'required|mimetypes:image/jpg,image/jpeg,image/png'
+                    'otherPhoto.*' => 'mimetypes:image/jpg,image/jpeg,image/png'
                 ];
+            }
             $rules += [
                 'AED' => 'required|numeric',
                 'department_id' => 'nullable|integer|exists:departments,id'
@@ -63,6 +71,54 @@ class ProductRequest extends FormRequest
                 ];
         }
         return $rules;
+    }
+    
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return app()->getLocale() == 'en' ? 
+        [
+            'id.required' => 'The Id Field Is Required.',
+            'id.integer' => 'The Id Must Be a Integer.',
+            'id.exists' => 'This Id Is Invalid.',
+            'mimetypes' => 'The :attribute Extension Must Be One Of These (jpg, jpeg, png).',
+            'photo.required' => 'The Product Photo Field Is Required.',
+            'quantity.required' => 'The Quantity Field Is Required.',
+            'quantity.numeric' => 'The Quantity Must Be a numeric.',
+            'AED.required' => 'The Price Field Is Required.',
+            'AED.numeric' => 'The Price Must Be a Numeric.',
+            'department_id.integer' => 'The Department Id Must Be a Integer.',
+            'department_id.exists' => 'This Department Id Is Invalid..',
+            'en.name.required' => 'The English Product Name Field Is Required.',
+            'en.name.string' => 'The English Product Name Must Be a String.',
+            'en.name.unique' => 'The English Product Name Has Already Been Taken.',
+            'ar.name.required' => 'The Arabic Product Name Field Is Required.',
+            'ar.name.string' => 'The Arabic Product Name Must Be a String.',
+            'ar.name.unique' => 'The Arabic Product Name Has Already Been Taken.'
+        ] : 
+        [
+            'id.required' => 'رقم المعرف مطلوب.',
+            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقمي.',
+            'id.exists' => 'هذا الرقم غير صحيح.',
+            'mimetypes' => '.(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
+            'photo.required' => 'صورة المننج الرئيسية مطلوبة.',
+            'quantity.required' => 'الكمية مطلوبة.',
+            'quantity.numeric' => 'يجب أن تكون الكمية من نوع رقمي.',
+            'AED.required' => 'السعر مطلوب.',
+            'AED.numeric' => 'يجب أن تكون السعر من نوع رقمي.',
+            'department_id.integer' => 'يجب أن يكون رقم التصنيف من نوع رقمي.',
+            'department_id.exists' => 'هذا الرقم غير صحيح.',
+            'en.name.required' => 'اسم التصنيف بالأنكليزية مطلوب.',
+            'en.name.string' => 'يجب أن يكون اسم المنتج بالأنكليزية من نوع نصي.',
+            'en.name.unique' => 'اسم المنتج بالأنكليزية موجود مسبقا.',
+            'ar.name.required' => 'اسم المنتج بالعربية مطلوب.',
+            'ar.name.string' => 'يجب أن يكون اسم المنتج بالعربية من نوع نصي.',
+            'ar.name.unique' => 'اسم المنتج بالعربية موجود مسبقا.'
+        ];
     }
     
     /**

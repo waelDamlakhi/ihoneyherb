@@ -38,13 +38,14 @@ class SocialMediaRequest extends FormRequest
             if (Str::contains($this->path(), 'update-socialMedia'))
                 $rules = [
                     'id' => 'required|integer|exists:social_media,id',
-                    'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png'
+                    'photoUrl' => 'nullable|url'
                 ];
             else
-                $rules['photo'] = 'required|mimetypes:image/jpg,image/jpeg,image/png';
-    
-                $rules['type'] = 'required|string|in:tel,email,application';
-                $rules['info'] = [
+                $rules['photoUrl'] = 'required_without:photo|url';
+            $rules += [
+                'photo' => 'nullable|mimetypes:image/png',
+                'type' => 'required|string|in:tel,email,application',
+                'info' => [
                     'required',
                     Rule::when($this->type === 'tel', 'numeric'),
                     Rule::when($this->type === 'email', 'email'),
@@ -52,7 +53,8 @@ class SocialMediaRequest extends FormRequest
                     Rule::unique('social_media')->where(function ($query) {
                         return $query->where(['type' => $this->type, 'info' => $this->info]);
                     })->ignore($this->id)
-                ];
+                ]
+            ];
         }
 
         return $rules;
@@ -70,7 +72,10 @@ class SocialMediaRequest extends FormRequest
             'id.required' => 'The Id Field Is Required.',
             'id.integer' => 'The Id Must Be a Integer.',
             'id.exists' => 'This Id Is Invalid.',
-            'photo.mimetypes' => 'The Photo Extension Must Be One Of These (jpg, jpeg, png).',
+            'photo.mimetypes' => 'The Photo Extension Must Be SVG.',
+            'photo.required' => 'The Social Media Photo Field Is Required.',
+            'photoUrl.required_without' => 'The Social Media Photo Path Field Is Required.',
+            'photoUrl.url' => 'The Social Media Photo Path must be a valid URL.',
             'photo.required' => 'The Social Media Photo Field Is Required.',
             'type.required' => 'The Social Media Type Field Is Required.',
             'type.string' => 'The Social Media Type Must Be a String.',
@@ -85,8 +90,10 @@ class SocialMediaRequest extends FormRequest
             'id.required' => 'رقم المعرف مطلوب.',
             'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقمي.',
             'id.exists' => 'هذا الرقم غير صحيح.',
-            'photo.mimetypes' => ' .(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
+            'photo.mimetypes' => '.SVG يجب أن يكون امتداد الصورة ',
             'photo.required' => 'صورة وسيلة التواصل مطلوبة.',
+            'photoUrl.required_without' => 'مسار صورة وسيلة التواصل مطلوب.',
+            'photoUrl.url' => 'يجب أن يكون مسار صورة وسيلة التواصل من نوع رابط..',
             'type.required' => 'نوع وسيلة التواصل مطلوب.',
             'type.string' => 'يجب أن يكون نوع وسيلة التواصل من نوع نصي.',
             'type.in' => 'يجب أن يكون نوع وسيلة التواصل احدى هذه الأنواع (هاتف, بريد الكتروني, تطبيق).',
@@ -94,7 +101,7 @@ class SocialMediaRequest extends FormRequest
             'info.numeric' => 'يجب أن تكون وسيلة التواصل من نوع رقمي.',
             'info.email' => 'يجب أن تكون وسيلة التواصل من نوع بريد الكتروني.',
             'info.string' => 'يجب أن تكون وسيلة التواصل من نوع نصي.',
-            'info.unique' => 'وسيلة التواصل موجودة مسبقا'
+            'info.unique' => 'وسيلة التواصل موجودة مسبقا.'
         ];
     }
 

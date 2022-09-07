@@ -36,6 +36,7 @@ Route::controller(ProductController::class)->group(function ()
     Route::get('products', 'read');
     Route::get('edit-product', 'edit');
     Route::post('update-product', 'update');
+    Route::post('update-product-pictures', 'updatePictures');
     Route::delete('delete-product', 'delete');
     // Route::get('primary-departments', 'getPrimaryDepartments');
 });

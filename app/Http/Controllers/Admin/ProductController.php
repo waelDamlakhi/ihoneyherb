@@ -8,6 +8,7 @@ use App\Traits\GeneralFunctions;
 use App\Models\QuantityAdjustments;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\ProductPicture;
 
 class ProductController extends Controller
 {
@@ -37,10 +38,16 @@ class ProductController extends Controller
                     'SAR' => $request->AED * 9.5,
                     'operation_type' => 'in',
                 ], 
-                $this->uploadFiles($request), 
-                $this->uploadFiles($request, 'banner', 'bannerUrl', 'bannerPath')
+                $this->uploadFiles($request->file('photo'))
             ));
             $product = Product::create($request->all());
+            if (!empty($request->file('otherPhoto'))) 
+            {
+                foreach ($request->file('otherPhoto') as $photo) 
+                {
+                    ProductPicture::create(array_merge(['product_id' => $product->id], $this->uploadFiles($photo)));
+                }
+            }
             $request->request->add(['product_id' => $product->id, 'description' => 'بداية الكمية']);
             QuantityAdjustments::create($request->all());
             return $this->makeResponse("Success", 200, "Product Added Successfully");
@@ -60,12 +67,13 @@ class ProductController extends Controller
     {
         try 
         {
-            $product = Product::select('id', 'AED', 'imageUrl', 'bannerUrl', 'department_id')->with(
+            $product = Product::select('id', 'AED', 'imageUrl', 'department_id')->with(
                 [
                     'department' => function ($department)
                     {
                         $department->select('id');
-                    }
+                    },
+                    'pictures'
                 ]
             )->find($request->id);
             return $this->makeResponse("Success", 200, "This Is Product Data", $product);
@@ -125,12 +133,7 @@ class ProductController extends Controller
             if (!empty($request->file('photo'))) 
             {
                 unlink($product->imagePath);
-                $request->request->add($this->uploadFiles($request));
-            }
-            if (!empty($request->file('banner'))) 
-            {
-                unlink($product->bannerPath);
-                $request->request->add($this->uploadFiles($request, 'banner', 'bannerUrl', 'bannerPath'));
+                $request->request->add($this->uploadFiles($request->file('photo')));
             }
             $request->request->add(
                 [
@@ -156,6 +159,27 @@ class ProductController extends Controller
     }
     
     /**
+     * Update Product Pictures.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePictures(ProductRequest $request)
+    {
+        try 
+        {
+            $productPicture = ProductPicture::find($request->id);
+            unlink($productPicture->imagePath);
+            $request->request->add($this->uploadFiles($request->file('photo')));
+            $productPicture->update($request->all());
+            return $this->makeResponse("Success", 200, "Product Picture Updated Successfully", $productPicture);
+        }
+        catch (Exception $e) 
+        {
+            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+        }
+    }
+    
+    /**
      * delete Product.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -165,8 +189,12 @@ class ProductController extends Controller
         try 
         {
             $product = Product::find($request->id);
+            $productPictures = ProductPicture::where('product_id', $request->id)->get();
+            foreach ($productPictures as $picture) 
+            {
+                unlink($picture->imagePath);
+            }
             unlink($product->imagePath);
-            unlink($product->bannerPath);
             $product->deleteTranslations();
             $product->delete();
             return $this->makeResponse("Success", 200, "Product Deleted Successfully");

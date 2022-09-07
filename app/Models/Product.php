@@ -24,10 +24,7 @@ class Product extends Model implements TranslatableContract
         'SAR',
         'quantity',
         'imageUrl', 
-        'imagePath', 
-        'bannerUrl',
-        'bannerPath',
-        'show_in',
+        'imagePath',
         'admin_id',
         'department_id',
     ];
@@ -40,8 +37,6 @@ class Product extends Model implements TranslatableContract
     protected $hidden = [
         'admin_id', 
         'department_id',
-        'imagePath',
-        'bannerPath'
     ];
 
     /**
@@ -88,6 +83,14 @@ class Product extends Model implements TranslatableContract
     public function product_orders()
     {
         return $this->hasMany(ProductOrder::class);
+    }
+    
+    /**
+     * Get the pictures for the Product.
+     */
+    public function pictures()
+    {
+        return $this->hasMany(ProductPicture::class);
     }
     
     /**
