@@ -81,11 +81,11 @@ class DepartmentRequest extends FormRequest
         ] : 
         [
             'id.required' => 'رقم المعرف مطلوب.',
-            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقمي.',
+            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
             'id.exists' => 'هذا الرقم غير صحيح.',
             'photo.mimetypes' => ' .(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
             'photo.required' => 'صورة التصنيف مطلوبة.',
-            'department_id.integer' => 'يجب أن يكون رقم التصنيف من نوع رقمي.',
+            'department_id.integer' => 'يجب أن يكون رقم التصنيف من نوع رقم صحيح.',
             'department_id.exists' => 'هذا الرقم غير صحيح.',
             'en.name.required' => 'اسم التصنيف بالأنكليزية مطلوب.',
             'en.name.string' => 'يجب أن يكون اسم التصنيف بالأنكليزية من نوع نصي.',

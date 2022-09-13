@@ -61,26 +61,6 @@ class DepartmentController extends Controller
     }
     
     /**
-     * Get All Departments Which Has Perant Or Does Not Have Children For Put Product Inside Them.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getDepartmentsForProduct()
-    {
-        try 
-        {
-            $departments = Department::select('id')->whereDoesntHave('children')->get();
-            foreach ($departments as $department)
-                $department->makeHidden('translations');
-            return $this->makeResponse("Success", 200, "This All Departments", $departments);
-        }
-        catch (Exception $e) 
-        {
-            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
-        }
-    }
-    
-    /**
      * Get All Departments.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -101,14 +81,14 @@ class DepartmentController extends Controller
                     }
                 ]
             )->get();
-            foreach ($departments as $department) 
-            {
-                if (COUNT($department->children) > 0)
-                    $department->hasChildren = true;
-                else
-                    $department->hasChildren = false;
-                $department->makeHidden('children');
-            }
+            // foreach ($departments as $department) 
+            // {
+            //     if (COUNT($department->children) > 0)
+            //         $department->hasChildren = true;
+            //     else
+            //         $department->hasChildren = false;
+            //     $department->makeHidden('children');
+            // }
             return $this->makeResponse("Success", 200, "This All Departments", $departments);
         }
         catch (Exception $e) 

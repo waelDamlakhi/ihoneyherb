@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Models\Product;
+use App\Models\Department;
+use App\Models\ProductPicture;
 use App\Traits\GeneralFunctions;
 use App\Models\QuantityAdjustments;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Models\ProductPicture;
 
 class ProductController extends Controller
 {
@@ -21,6 +22,26 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('tokenAuth:admin-api');
+    }
+    
+    /**
+     * Get All Departments Which Has Perant Or Does Not Have Children For Put Product Inside Them.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDepartmentsForProduct()
+    {
+        try 
+        {
+            $departments = Department::select('id')->whereDoesntHave('children')->get();
+            foreach ($departments as $department)
+                $department->makeHidden('translations');
+            return $this->makeResponse("Success", 200, "This All Departments", $departments);
+        }
+        catch (Exception $e) 
+        {
+            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+        }
     }
     
     /**

@@ -88,7 +88,7 @@ class SocialMediaRequest extends FormRequest
         ] : 
         [
             'id.required' => 'رقم المعرف مطلوب.',
-            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقمي.',
+            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
             'id.exists' => 'هذا الرقم غير صحيح.',
             'photo.mimetypes' => '.SVG يجب أن يكون امتداد الصورة ',
             'photo.required' => 'صورة وسيلة التواصل مطلوبة.',

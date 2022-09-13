@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\QuantityController;
 use App\Http\Controllers\Admin\SocialMediaController;
 
 /*
@@ -27,7 +28,6 @@ Route::controller(DepartmentController::class)->group(function ()
     Route::post('update-department', 'update');
     Route::delete('delete-department', 'delete');
     Route::get('primary-departments', 'getPrimaryDepartments');
-    Route::get('departments-for-products', 'getDepartmentsForProduct');
 });
 
 Route::controller(ProductController::class)->group(function ()
@@ -38,7 +38,7 @@ Route::controller(ProductController::class)->group(function ()
     Route::post('update-product', 'update');
     Route::post('update-product-pictures', 'updatePictures');
     Route::delete('delete-product', 'delete');
-    // Route::get('primary-departments', 'getPrimaryDepartments');
+    Route::get('departments-for-products', 'getDepartmentsForProduct');
 });
 
 Route::controller(SocialMediaController::class)->group(function ()
@@ -48,4 +48,14 @@ Route::controller(SocialMediaController::class)->group(function ()
     Route::get('edit-socialMedia', 'edit');
     Route::post('update-socialMedia', 'update');
     Route::delete('delete-socialMedia', 'delete');
+});
+
+Route::controller(QuantityController::class)->group(function ()
+{
+    Route::post('create-quantityAdjustmentOperation', 'create');
+    Route::get('quantityAdjustmentOperations', 'read');
+    Route::get('edit-quantityAdjustmentOperation', 'edit');
+    Route::post('update-quantityAdjustmentOperation', 'update');
+    Route::delete('delete-quantityAdjustmentOperation', 'delete');
+    Route::get('products-for-quantityAdjusment', 'getProductsForQuantityAdjustment');
 });

@@ -50,7 +50,7 @@ class ProductRequest extends FormRequest
             else
             {
                 $rules = [
-                    'quantity' => 'required|numeric',
+                    'quantity' => 'required|integer',
                     'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
                     'otherPhoto.*' => 'mimetypes:image/jpg,image/jpeg,image/png'
                 ];
@@ -88,7 +88,7 @@ class ProductRequest extends FormRequest
             'mimetypes' => 'The :attribute Extension Must Be One Of These (jpg, jpeg, png).',
             'photo.required' => 'The Product Photo Field Is Required.',
             'quantity.required' => 'The Quantity Field Is Required.',
-            'quantity.numeric' => 'The Quantity Must Be a numeric.',
+            'quantity.integer' => 'The Quantity Must Be a integer.',
             'AED.required' => 'The Price Field Is Required.',
             'AED.numeric' => 'The Price Must Be a Numeric.',
             'department_id.integer' => 'The Department Id Must Be a Integer.',
@@ -102,15 +102,15 @@ class ProductRequest extends FormRequest
         ] : 
         [
             'id.required' => 'رقم المعرف مطلوب.',
-            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقمي.',
+            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
             'id.exists' => 'هذا الرقم غير صحيح.',
             'mimetypes' => '.(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
             'photo.required' => 'صورة المننج الرئيسية مطلوبة.',
             'quantity.required' => 'الكمية مطلوبة.',
-            'quantity.numeric' => 'يجب أن تكون الكمية من نوع رقمي.',
+            'quantity.integer' => 'يجب أن تكون الكمية من نوع رقم صحيح.',
             'AED.required' => 'السعر مطلوب.',
             'AED.numeric' => 'يجب أن تكون السعر من نوع رقمي.',
-            'department_id.integer' => 'يجب أن يكون رقم التصنيف من نوع رقمي.',
+            'department_id.integer' => 'يجب أن يكون رقم التصنيف من نوع رقم صحيح.',
             'department_id.exists' => 'هذا الرقم غير صحيح.',
             'en.name.required' => 'اسم التصنيف بالأنكليزية مطلوب.',
             'en.name.string' => 'يجب أن يكون اسم المنتج بالأنكليزية من نوع نصي.',
