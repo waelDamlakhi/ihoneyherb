@@ -39,7 +39,7 @@ class QuantityController extends Controller
                 if ($product->quantity >= $request->quantity)
                     $product->quantity -= $request->quantity;
                 else
-                    return $this->makeResponse("Faild", 422, "There Is Not Enough Quantity");
+                    return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? "There Is Not Enough Quantity" : 'لا توجد كمية كافية');
             $product->save();
             QuantityAdjustments::create($request->all());
             return $this->makeResponse("Success", 200, "Quantity Adjustment Operation Added Successfully");
@@ -160,7 +160,7 @@ class QuantityController extends Controller
                 if ($product->quantity >= $request->quantity)
                     $product->quantity -= $request->quantity;
                 else
-                    return $this->makeResponse("Faild", 422, "There Is Not Enough Quantity");
+                    return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? "There Is Not Enough Quantity" : 'لا توجد كمية كافية');
             if ($product != $oldProduct)
                 $oldProduct->save();
             $product->save();

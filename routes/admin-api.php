@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\DepartmentDiscountController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductPictureController;
 use App\Http\Controllers\Admin\QuantityController;
@@ -29,6 +30,16 @@ Route::controller(DepartmentController::class)->group(function ()
     Route::post('update-department', 'update');
     Route::delete('delete-department', 'delete');
     Route::get('primary-departments', 'getPrimaryDepartments');
+});
+
+Route::controller(DepartmentDiscountController::class)->group(function ()
+{
+    Route::post('create-department-discount', 'create');
+    Route::get('departmentsDiscounts', 'read');
+    Route::get('edit-department-discount', 'edit');
+    Route::post('update-department-discount', 'update');
+    Route::delete('delete-department-discount', 'delete');
+    Route::get('departments-for-discount', 'getDepartmentsForDiscount');
 });
 
 Route::controller(ProductController::class)->group(function ()
