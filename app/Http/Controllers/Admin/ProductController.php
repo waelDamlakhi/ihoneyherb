@@ -180,27 +180,6 @@ class ProductController extends Controller
     }
     
     /**
-     * Update Product Pictures.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updatePictures(ProductRequest $request)
-    {
-        try 
-        {
-            $productPicture = ProductPicture::find($request->id);
-            unlink($productPicture->imagePath);
-            $request->request->add($this->uploadFiles($request->file('photo')));
-            $productPicture->update($request->all());
-            return $this->makeResponse("Success", 200, "Product Picture Updated Successfully", $productPicture);
-        }
-        catch (Exception $e) 
-        {
-            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
-        }
-    }
-    
-    /**
      * delete Product.
      *
      * @return \Illuminate\Http\JsonResponse

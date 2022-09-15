@@ -43,7 +43,7 @@ class SocialMediaRequest extends FormRequest
             else
                 $rules['photoUrl'] = 'required_without:photo|url';
             $rules += [
-                'photo' => 'nullable|mimetypes:image/png',
+                'photo' => 'nullable|mimetypes:image/svg',
                 'type' => 'required|string|in:tel,email,application',
                 'info' => [
                     'required',

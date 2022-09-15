@@ -33,13 +33,6 @@ class ProductRequest extends FormRequest
         {
             $rules['id'] = 'required|integer|exists:products,id';
         }
-        elseif (Str::contains($this->path(), 'update-product-pictures')) 
-        {
-            $rules = [
-                'id' => 'required|integer|exists:product_pictures,id',
-                'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
-            ];
-        }
         else
         {
             if (Str::contains($this->path(), 'update-product'))

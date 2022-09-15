@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductPictureController;
 use App\Http\Controllers\Admin\QuantityController;
 use App\Http\Controllers\Admin\SocialMediaController;
 
@@ -36,9 +37,15 @@ Route::controller(ProductController::class)->group(function ()
     Route::get('products', 'read');
     Route::get('edit-product', 'edit');
     Route::post('update-product', 'update');
-    Route::post('update-product-pictures', 'updatePictures');
     Route::delete('delete-product', 'delete');
     Route::get('departments-for-products', 'getDepartmentsForProduct');
+});
+
+Route::controller(ProductPictureController::class)->group(function ()
+{
+    Route::post('create-product-pictures', 'create');
+    Route::post('update-product-pictures', 'update');
+    Route::delete('delete-product-pictures', 'delete');
 });
 
 Route::controller(SocialMediaController::class)->group(function ()
