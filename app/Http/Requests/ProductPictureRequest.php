@@ -36,13 +36,18 @@ class ProductPictureRequest extends FormRequest
         {
             if (Str::contains($this->path(), 'update-product-pictures')) 
             {
-                $rules['id'] = 'required|integer|exists:product_pictures,id';
+                $rules = [
+                    'id' => 'required|integer|exists:product_pictures,id',
+                    'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png'
+                ];
             }
             else
             {
-                $rules['product_id'] = 'required|integer|exists:products,id';
+                $rules = [
+                    'product_id' => 'required|integer|exists:products,id',
+                    'photo.*' => 'required|mimetypes:image/jpg,image/jpeg,image/png'
+                    ];
             }
-            $rules['photo'] = 'required|mimetypes:image/jpg,image/jpeg,image/png';
         }
         return $rules;
     }

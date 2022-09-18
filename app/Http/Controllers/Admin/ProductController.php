@@ -88,7 +88,7 @@ class ProductController extends Controller
     {
         try 
         {
-            $product = Product::select('id', 'AED', 'imageUrl', 'department_id')->with(
+            $product = Product::select('id', 'AED', 'quantity', 'imageUrl', 'department_id')->with(
                 [
                     'department' => function ($department)
                     {
