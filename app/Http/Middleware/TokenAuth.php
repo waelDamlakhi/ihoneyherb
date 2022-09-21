@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Illuminate\Support\Facades\Route;
 
 class TokenAuth  extends BaseMiddleware
 {
@@ -59,10 +60,13 @@ class TokenAuth  extends BaseMiddleware
         {
             return $this->makeResponse("Failed",  $e->getCode(), $e->getMessage());
         }
-        $request->request->add([
-            $guard == 'admin-api' ? 'admin_id' : 'user_id' => $user['id'],
-            'guard' => $guard
-        ]);
+        if (Route::getCurrentRoute()->getActionMethod() != 'update') 
+        {
+            $request->request->add([
+                $guard == 'admin-api' ? 'admin_id' : 'user_id' => $user['id'],
+                'guard' => $guard
+            ]);
+        }
         return $next($request);
     }
 }

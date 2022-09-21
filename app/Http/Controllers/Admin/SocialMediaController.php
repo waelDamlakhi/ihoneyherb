@@ -30,7 +30,7 @@ class SocialMediaController extends Controller
     {
         try 
         {
-            $request->request->add($request->hasFile('photo') ? $this->uploadFiles($request->file('photo')) : ['imageUrl' => $request->photoUrl]);
+            $request->request->add($request->hasFile('photo') ? $this->uploadFiles($request->file('photo')) : ['imageUrl' => $request->photoName]);
             SocialMedia::create($request->all());
             return $this->makeResponse("Success", 200, "Social Media Added Successfully");
         }
@@ -93,13 +93,13 @@ class SocialMediaController extends Controller
         try 
         {
             $socialMedia = SocialMedia::find($request->id);
-            if (!empty($request->photoUrl)) 
+            if (!empty($request->photoName)) 
             {
                 if ($socialMedia->imagePath != null) 
                 {
                     unlink($socialMedia->imagePath);
                 }
-                $request->request->add(['iamgeUrl' => $request->photoUrl, 'imagePath' => null]);
+                $request->request->add(['imageUrl' => $request->photoName, 'imagePath' => null]);
             }
             elseif (!empty($request->file('photo'))) 
             {

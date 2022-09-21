@@ -38,10 +38,10 @@ class SocialMediaRequest extends FormRequest
             if (Str::contains($this->path(), 'update-socialMedia'))
                 $rules = [
                     'id' => 'required|integer|exists:social_media,id',
-                    'photoUrl' => 'nullable|url'
+                    'photoName' => 'nullable|string'
                 ];
             else
-                $rules['photoUrl'] = 'required_without:photo|url';
+                $rules['photoName'] = 'required_without:photo|string';
             $rules += [
                 'photo' => 'nullable|mimetypes:image/svg',
                 'type' => 'required|string|in:tel,email,application',
@@ -73,10 +73,8 @@ class SocialMediaRequest extends FormRequest
             'id.integer' => 'The Id Must Be a Integer.',
             'id.exists' => 'This Id Is Invalid.',
             'photo.mimetypes' => 'The Photo Extension Must Be SVG.',
-            'photo.required' => 'The Social Media Photo Field Is Required.',
-            'photoUrl.required_without' => 'The Social Media Photo Path Field Is Required.',
-            'photoUrl.url' => 'The Social Media Photo Path must be a valid URL.',
-            'photo.required' => 'The Social Media Photo Field Is Required.',
+            'photoName.required_without' => 'The Social Media Photo Field Is Required.',
+            'photoName.string' => 'The Social Media Photo Name must be a String.',
             'type.required' => 'The Social Media Type Field Is Required.',
             'type.string' => 'The Social Media Type Must Be a String.',
             'type.in' => 'The Social Media Type Must Be One Of These (tel, email, application).',
@@ -91,9 +89,8 @@ class SocialMediaRequest extends FormRequest
             'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
             'id.exists' => 'هذا الرقم غير صحيح.',
             'photo.mimetypes' => '.SVG يجب أن يكون امتداد الصورة ',
-            'photo.required' => 'صورة وسيلة التواصل مطلوبة.',
-            'photoUrl.required_without' => 'مسار صورة وسيلة التواصل مطلوب.',
-            'photoUrl.url' => 'يجب أن يكون مسار صورة وسيلة التواصل من نوع رابط..',
+            'photoName.required_without' => 'صورة وسيلة التواصل مطلوبة.',
+            'photoName.string' => 'يجب أن يكون اسم صورة وسيلة التواصل من نوع نصي..',
             'type.required' => 'نوع وسيلة التواصل مطلوب.',
             'type.string' => 'يجب أن يكون نوع وسيلة التواصل من نوع نصي.',
             'type.in' => 'يجب أن يكون نوع وسيلة التواصل احدى هذه الأنواع (هاتف, بريد الكتروني, تطبيق).',
