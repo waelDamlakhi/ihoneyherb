@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Phone extends Model
+class Banner extends Model
 {
     use HasFactory;
-
-    protected $table = 'Phones';
+    
+    protected $table = 'banners';
     public $timestamps = false;
     /**
      * The attributes that are mass assignable.
@@ -17,19 +17,18 @@ class Phone extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'tel',
-        'type',
-        'user_id'
+        'name',
+        'count',
     ];
-    
-    protected $hidden = [
-        'user_id'
-    ];
+
     /**
-     * Get the Phones that owns the User.
+     * Get all of the Products for the Banner.
      */
-    public function user()
+    public function products()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Product::class)->withPivot([
+            'bannerUrl',
+            // 'bannerPath',
+        ])->as('banner_product');
     }
 }

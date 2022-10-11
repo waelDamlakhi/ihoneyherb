@@ -33,12 +33,13 @@ class DepartmentDiscountController extends Controller
         {
             $departmentsDiscounts = DepartmentDiscount::where(
                 [
+                    ['department_id', $request->department_id],
                     ['end', '>=', $request->start],
                     ['start', '<=', $request->end]
                 ]
             )->get();
             if (COUNT($departmentsDiscounts) > 0) 
-                return $this->makeResponse("Faild", 422, 'This Date Overlaps With Another Date');
+                return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? 'This Date Overlaps With Another Date': 'هذا التاريخ يتداخل مع تاريخ أخر');
             $request->merge(['discount' => $request->discount / 100]);
             DepartmentDiscount::create($request->all());
             return $this->makeResponse("Success", 200, "Department Discount Added Successfully", $departmentsDiscounts);
@@ -141,10 +142,11 @@ class DepartmentDiscountController extends Controller
                     }
                 ]
             )->find($request->id);
-            if ($request->start != $departmentDiscount->start || $request->end != $departmentDiscount->end) 
+            if ($request->start != $departmentDiscount->start || $request->end != $departmentDiscount->end || $request->department_id != $departmentDiscount->department_id) 
             {
                 $departmentsDiscounts = DepartmentDiscount::where(
                     [
+                        ['department_id', $request->department_id],
                         ['end', '>=', $request->start],
                         ['start', '<=', $request->end],
                         ['id', '!=', $request->id]

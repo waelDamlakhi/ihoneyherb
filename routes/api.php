@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +25,19 @@ Route::controller(AuthController::class)->group(function ()
         Route::get('refresh-token', 'refresh');
         Route::get('logout', 'logout');
     });
+});
+
+Route::controller(CategoryController::class)->group(function ()
+{
+    Route::get('categories-discount', 'getCategoriesDiscount');
+    Route::get('primary-categories', 'getPrimaryCategories');
+});
+
+Route::controller(ProductController::class)->group(function ()
+{
+    Route::get('new-products', 'getNewProducts');
+    Route::get('banners-products', 'getProductsBanners');
+    Route::get('best-seller-products', 'getBestSellerProducts');
+    Route::get('top-rated-products', 'getTopRatedProducts');
+    Route::post('search-products', 'searchProducts');
 });

@@ -60,7 +60,7 @@ class TokenAuth  extends BaseMiddleware
         {
             return $this->makeResponse("Failed",  $e->getCode(), $e->getMessage());
         }
-        if (Route::getCurrentRoute()->getActionMethod() != 'update') 
+        if (Route::getCurrentRoute()->getActionMethod() != 'update' || $guard != 'admin-api') 
         {
             $request->request->add([
                 $guard == 'admin-api' ? 'admin_id' : 'user_id' => $user['id'],

@@ -39,6 +39,6 @@ class Order extends Model
         return $this->belongsToMany(Product::class)->withPivot([
             'price',
             'quantity',
-        ])->as('product_order');
+        ])->as('order_product');
     }
 }

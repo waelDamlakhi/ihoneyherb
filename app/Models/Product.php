@@ -67,6 +67,17 @@ class Product extends Model implements TranslatableContract
     }
     
     /**
+     * Get all of the Banners for the Product.
+     */
+    public function banners()
+    {
+        return $this->belongsToMany(Banners::class)->withPivot([
+            'bannerUrl',
+            // 'bannerPath',
+        ])->as('banner_product');
+    }
+    
+    /**
      * Get all of the Orders for the Products.
      */
     public function orders()
@@ -74,7 +85,7 @@ class Product extends Model implements TranslatableContract
         return $this->belongsToMany(Order::class)->withPivot([
             'price',
             'quantity',
-        ])->as('product_order');
+        ])->as('order_product');
     }
     
     /**
