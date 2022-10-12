@@ -63,4 +63,12 @@ class Department extends Model implements TranslatableContract
     {
         return $this->hasMany(Department::class, 'department_id');
     }
+    
+    /**
+     * Get the Discount for the Department.
+     */
+    public function discount()
+    {
+        return $this->hasMany(DepartmentDiscount::class);
+    }
 }

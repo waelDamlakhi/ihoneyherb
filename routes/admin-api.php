@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BannerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DepartmentController;
@@ -76,4 +77,15 @@ Route::controller(QuantityController::class)->group(function ()
     Route::post('update-quantityAdjustmentOperation', 'update');
     Route::delete('delete-quantityAdjustmentOperation', 'delete');
     Route::get('products-for-quantityAdjusment', 'getProductsForQuantityAdjustment');
+});
+
+Route::controller(BannerController::class)->group(function ()
+{
+    Route::post('create-banner', 'create');
+    Route::get('banners', 'read');
+    Route::get('edit-banner', 'edit');
+    Route::post('update-banner', 'update');
+    Route::delete('delete-banner', 'delete');
+    Route::get('get-products', 'getProducts');
+    Route::get('get-banners', 'getBanners');
 });

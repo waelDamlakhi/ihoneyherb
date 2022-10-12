@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Banner;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Traits\GeneralFunctions;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -45,7 +46,30 @@ class ProductController extends Controller
                 [
                     'products' => function ($products)
                     {
-                        $products->select('products.id', 'AED', 'SAR', 'USD');
+                        $products->select('products.id', 'AED', 'SAR', 'USD', 'department_id')->with(
+                            [
+                                'department' => function ($department)
+                                {
+                                    $department->select('id')->with(
+                                        [
+                                            'discount' => function ($discount)
+                                            {
+                                                $discount->select('discount', 'department_id')->where(
+                                                    [
+                                                        ['end', '>=', Carbon::today()],
+                                                        ['start', '<=', Carbon::today()]
+                                                    ]
+                                                );
+                                            }
+                                        ]
+                                    );
+                                },
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'product_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->get();

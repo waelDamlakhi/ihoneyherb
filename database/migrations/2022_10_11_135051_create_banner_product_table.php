@@ -15,6 +15,7 @@ class CreateBannerProductTable extends Migration
     {
         Schema::create('banner_product', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('admin_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('banner_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('bannerUrl');

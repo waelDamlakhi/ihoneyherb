@@ -21,14 +21,12 @@ class Banner extends Model
         'count',
     ];
 
+    protected $hidden = [];
     /**
      * Get all of the Products for the Banner.
      */
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot([
-            'bannerUrl',
-            // 'bannerPath',
-        ])->as('banner_product');
+        return $this->belongsToMany(Product::class)->withPivot(['bannerUrl'])->as('banner_product')->using(BannerProduct::class);
     }
 }

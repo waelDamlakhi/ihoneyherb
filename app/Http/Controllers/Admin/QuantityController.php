@@ -113,11 +113,14 @@ class QuantityController extends Controller
     {
         try 
         {
-            $products = Product::select('id')->get();
-            foreach ($products as $product)
-            {
-                $product->makeHidden(['translations', 'unit', 'description']);
-            }
+            $products = Product::select('id')->with(
+                [
+                    'translations' => function ($translation) 
+                    {
+                        $translation->select('name', 'product_id', 'locale');
+                    }
+                ]
+            )->get();
             return $this->makeResponse("Success", 200, "This All Products", $products);
         }
         catch (Exception $e) 
