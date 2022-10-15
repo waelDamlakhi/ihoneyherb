@@ -21,6 +21,8 @@ Route::controller(AuthController::class)->group(function ()
 {
     Route::post('login', 'login');
     Route::post('register', 'register');
+    Route::put('verify-email', 'verifyEmail');
+    Route::get('resend-email-verify-code', 'reSendEmailVerifyCode');
 });
 
 Route::controller(PhoneController::class)->group(function ()

@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
             [
                 'name' => 'Administrator',
                 'userName' => 'Admin',
-                'Password' => '$2y$10$AAmrvNHhMRIo3ED2pNYTHu2icHfyYxyPE/OJf18zQNH...',
+                'Password' => '$2y$10$7IY9dtxr7PHX3B8wdE8KM.jfDdNegG17baeGGObqCB7c2bsrl6fGa',
                 'email' => 'admin@ihoneyherb.ae'
             ]
         );

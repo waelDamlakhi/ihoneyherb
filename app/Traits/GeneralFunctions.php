@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+
 
 trait GeneralFunctions {
 
@@ -38,4 +41,42 @@ trait GeneralFunctions {
         ];
     }
 
+    /*
+        ********************************************
+        *** Function Send mails From The Server ***
+        ********************************************
+    */
+    public function sendMail($email, $subject, $body)
+    {
+        try 
+        {
+            //Load Composer's autoloader
+            require base_path("vendor/autoload.php");
+    
+            //Create an instance; passing `true` enables exceptions
+            $mail = new PHPMailer(true);
+            // Email server settings
+            $mail->SMTPDebug = 0;
+            $mail->isSMTP();
+            $mail->Host = env('MAIL_HOST');             //  smtp host
+            $mail->SMTPAuth = true;
+            $mail->Username = env('MAIL_USERNAME');   //  sender username
+            $mail->Password = env('MAIL_PASSWORD');       // sender password
+            $mail->SMTPSecure = env('MAIL_ENCRYPTION');                  // encryption - ssl/tls
+            $mail->Port = env('MAIL_PORT');
+            $mail->setFrom(env('MAIL_USERNAME'), env('MAIL_FROM_NAME'));
+            $mail->addAddress($email); 
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = $subject;
+            $mail->Body = $body;
+            $mail->send();
+            return true;
+        } 
+        catch (Exception $e) 
+        {
+            return $e;
+        }
+    }
 }

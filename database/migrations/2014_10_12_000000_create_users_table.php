@@ -19,6 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('userName');
             $table->string('password');
             $table->string('email');
+            $table->boolean('emailValidation')->default(false);
+            $table->string('emailCode');
+            $table->timestamp('codeExpirationDate');
         });
     }
 
