@@ -71,7 +71,7 @@ class BannerRequest extends FormRequest
             'product_id.required' => 'The Product Id Field Is Required.',
             'product_id.integer' => 'The Product Id Must Be a Integer.',
             'product_id.exists' => 'This Product Id Is Invalid.',
-            'product_id.unique' => 'This Product Id Has Already Been Added To This Banner.',
+            'product_id.unique' => 'This Product Has Already Been Added To This Banner.',
             'photo.mimetypes' => 'The Product Banner Photo Extension Must Be One Of These (jpg, jpeg, png).',
             'photo.required' => 'The Product Photo Field Is Required.'
         ] : 
@@ -82,7 +82,7 @@ class BannerRequest extends FormRequest
             'product_id.required' => 'رقم المنتج مطلوب.',
             'product_id.integer' => 'يجب أن يكون رقم المنتج من نوع رقم صحيح.',
             'product_id.exists' => 'هذا الرقم غير صحيح.',
-            'product_id.unique' => 'تمت إضافة معرف المنتج هذا بالفعل إلى هذا الشعار.',
+            'product_id.unique' => 'تمت إضافة المنتج هذا بالفعل إلى هذا الشعار.',
             'photo.mimetypes' => '.(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
             'photo.required' => 'صورة لافتة المننج مطلوبة.'
         ];

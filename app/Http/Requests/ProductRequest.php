@@ -29,39 +29,46 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        if (Str::contains($this->path(), 'delete-product') || Str::contains($this->path(), 'edit-product')) 
+        if (Str::contains($this->path(), 'admin/api')) 
         {
-            $rules['id'] = 'required|integer|exists:products,id';
-        }
-        else
-        {
-            if (Str::contains($this->path(), 'update-product'))
-                $rules = [
-                    'id' => 'required|integer|exists:products,id',
-                    'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png',
-                ];
+            if (Str::contains($this->path(), 'delete-product') || Str::contains($this->path(), 'edit-product')) 
+            {
+                $rules['id'] = 'required|integer|exists:products,id';
+            }
             else
             {
-                $rules = [
-                    'quantity' => 'required|integer',
-                    'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
-                    'otherPhoto.*' => 'mimetypes:image/jpg,image/jpeg,image/png'
-                ];
-            }
-            $rules += [
-                'AED' => 'required|numeric',
-                'department_id' => 'nullable|integer|exists:departments,id'
-            ];
-            foreach (config('translatable.locales') as $lang) 
+                if (Str::contains($this->path(), 'update-product'))
+                    $rules = [
+                        'id' => 'required|integer|exists:products,id',
+                        'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png',
+                    ];
+                else
+                {
+                    $rules = [
+                        'quantity' => 'required|integer',
+                        'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
+                        'otherPhoto.*' => 'mimetypes:image/jpg,image/jpeg,image/png'
+                    ];
+                }
                 $rules += [
-                    $lang . ".name" => [
-                        'required',
-                        'string',
-                        Rule::unique('product_translations', 'name')->ignore($this->id, 'product_id')
-                    ],
-                    $lang . ".unit" => 'required|string',
-                    $lang . ".description" => 'required|string'
+                    'AED' => 'required|numeric',
+                    'department_id' => 'nullable|integer|exists:departments,id'
                 ];
+                foreach (config('translatable.locales') as $lang) 
+                    $rules += [
+                        $lang . ".name" => [
+                            'required',
+                            'string',
+                            Rule::unique('product_translations', 'name')->ignore($this->id, 'product_id')
+                        ],
+                        $lang . ".unit" => 'required|string',
+                        $lang . ".description" => 'required|string'
+                    ];
+            }
+        }
+        else 
+        {
+            $rules['limit'] = 'nullable|integer';
         }
         return $rules;
     }
@@ -75,6 +82,7 @@ class ProductRequest extends FormRequest
     {
         return app()->getLocale() == 'en' ? 
         [
+            'limit.integer' => 'The limit Must Be a Integer.',
             'id.required' => 'The Id Field Is Required.',
             'id.integer' => 'The Id Must Be a Integer.',
             'id.exists' => 'This Id Is Invalid.',
@@ -95,6 +103,7 @@ class ProductRequest extends FormRequest
         ] : 
         [
             'id.required' => 'رقم المعرف مطلوب.',
+            'limit.integer' => 'يجب أن يكون عدد المنتجات من نوع رقم صحيح.',
             'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
             'id.exists' => 'هذا الرقم غير صحيح.',
             'mimetypes' => '.(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',

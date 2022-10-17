@@ -14,12 +14,17 @@ class BannerSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 2; $i++) 
-            Banner::create(
-                [
-                    'name' => 'banner ' . $i,
-                    'count' => 5
-                ]
-            );
+        $banners = [
+            [
+                'name' => 'Homepage banner middle',
+                'count' => 5
+            ],
+            [
+                'name' => 'Homepage banner bottom',
+                'count' => 5
+            ]
+        ];
+        for ($i = 0; $i < COUNT($banners); $i++) 
+            Banner::create($banners[$i]);
     }
 }

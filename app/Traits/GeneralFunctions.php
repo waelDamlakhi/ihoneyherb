@@ -46,7 +46,7 @@ trait GeneralFunctions {
         *** Function Send mails From The Server ***
         ********************************************
     */
-    public function sendMail($email, $subject, $body)
+    public function sendMail($email, $view, $data)
     {
         try 
         {
@@ -69,8 +69,8 @@ trait GeneralFunctions {
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = $subject;
-            $mail->Body = $body;
+            $mail->Subject = $data['subject'];
+            $mail->Body = view($view, $data);
             $mail->send();
             return true;
         } 

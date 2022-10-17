@@ -71,7 +71,7 @@ class AuthController extends Controller
         {
             $credentials = $request->only(['userName', 'password']);
             $emailCode = random_int(100000, 999999);
-            $response = $this->sendMail($request->email, "Email Verification Code", "<h2>Hello " . $request->name . "</h2><h3>Welcome To IHoneyHerb Store</h3><h4>Your Verification Code Is : <strong>" . $emailCode . "</strong></h4>");
+            $response = $this->sendMail($request->email, "emailVerificationCode", ['subject' => 'Email Verification Code', 'name' => $request->name, 'code' => $emailCode]);
             if ($response != true)
                 return $this->makeResponse('Failed', $response->getCode(), $response->getMessage());
             $request->merge(
@@ -154,7 +154,7 @@ class AuthController extends Controller
             if ($user['codeExpirationDate'] >= Carbon::now()) 
                 return $this->makeResponse('Failed', 422, "Verification Code Timed Out");
             $emailCode = random_int(100000, 999999);
-            $response = $this->sendMail($request->email, "Email Verification Code", "<h2>Hello " . $request->name . "</h2><h3>Welcome To IHoneyHerb Store</h3><h4>Your Verification Code Is : <strong>" . $emailCode . "</strong></h4>");
+            $response = $this->sendMail($user->email, "emailVerificationCode", ['subject' => 'Email Verification Code', 'name' => $user->name, 'code' => $emailCode]);
             if ($response != true)
                 return $this->makeResponse('Failed', $response->getCode(), $response->getMessage());
             $request->merge(

@@ -52,7 +52,7 @@ class CategoryController extends Controller
     {
         try 
         {
-            $departments = Department::select('id', 'imageUrl')->where('department_id', null)->whereDoesntHave('products')->get();
+            $departments = Department::select('id', 'imageUrl')->where('department_id', null)->whereDoesntHave('products')->limit(7)->get();
             return $this->makeResponse("Success", 200, "This All Primary Departments", $departments);
         }
         catch (Exception $e) 
