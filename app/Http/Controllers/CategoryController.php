@@ -35,7 +35,7 @@ class CategoryController extends Controller
                     ['start', '<=', Carbon::today()]
                 ]
             )->get();
-            return $this->makeResponse("Success", 200, "These Are All Categories That Have A Discount Today", $departmentsDiscount);
+            return $this->makeResponse("Success", 200, __("CategoryLang.TheseAreAllCategoriesThatHaveADiscountToday"), $departmentsDiscount);
         }
         catch (Exception $e) 
         {
@@ -53,7 +53,32 @@ class CategoryController extends Controller
         try 
         {
             $departments = Department::select('id', 'imageUrl')->where('department_id', null)->whereDoesntHave('products')->limit(7)->get();
-            return $this->makeResponse("Success", 200, "This All Primary Departments", $departments);
+            return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllPrimaryDepartments'), $departments);
+        }
+        catch (Exception $e) 
+        {
+            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+        }
+    }
+    
+    /**
+     * Get All Departments Which Have Products For Filter.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCategoriesForFilter()
+    {
+        try 
+        {
+            $departments = Department::select('id')->with(
+                [
+                    'translations' => function ($translation) 
+                    {
+                        $translation->select('name', 'department_id', 'locale');
+                    }
+                ]
+            )->whereHas('products')->get();
+            return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllDepartments'), $departments);
         }
         catch (Exception $e) 
         {

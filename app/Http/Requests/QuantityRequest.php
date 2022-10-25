@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use App\Traits\GeneralFunctions;
 
 class QuantityRequest extends FormRequest

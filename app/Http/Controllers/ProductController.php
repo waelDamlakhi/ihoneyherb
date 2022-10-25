@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Banner;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Traits\GeneralFunctions;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -21,41 +20,34 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getNewProducts(ProductRequest $request)
-    {
-        try 
-        {
-            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
-                [
-                    'department' => function ($department)
-                    {
-                        $department->select('id')->with(
-                            [
-                                'discount' => function ($discount)
-                                {
-                                    $discount->select('discount', 'department_id')->where(
-                                        [
-                                            ['end', '>=', Carbon::today()],
-                                            ['start', '<=', Carbon::today()]
-                                        ]
-                                    );
-                                }
-                            ]
-                        );
-                    },
-                    'translations' => function ($translation) 
-                    {
-                        $translation->select('name', 'product_id', 'locale');
-                    }
-                ]
-            )->withAvg('users AS rate', 'product_user.rate')->orderby('id', 'DESC')->limit($request->limit)->get();
-            return $this->makeResponse("Success", 200, "These Are All Products From Newest To Oldest", $products);
-        }
-        catch (Exception $e) 
-        {
-            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
-        }
-    }
+    // public function getNewProducts(ProductRequest $request)
+    // {
+    //     try 
+    //     {
+    //         $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
+    //             [
+    //                 'discount' => function ($discount)
+    //                 {
+    //                     $discount->select('discount', 'department_discounts.department_id')->where(
+    //                         [
+    //                             ['end', '>=', Carbon::today()],
+    //                             ['start', '<=', Carbon::today()]
+    //                         ]
+    //                     );
+    //                 },
+    //                 'translations' => function ($translation) 
+    //                 {
+    //                     $translation->select('name', 'product_id', 'locale');
+    //                 }
+    //             ]
+    //         )->withAvg('users AS rate', 'product_user.rate')->orderby('id', 'DESC')->limit($request->limit)->get();
+    //         return $this->makeResponse("Success", 200, "These Are All Products From Newest To Oldest", $products);
+    //     }
+    //     catch (Exception $e) 
+    //     {
+    //         return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+    //     }
+    // }
     
     /**
      * Get All Products Banners.
@@ -72,19 +64,12 @@ class ProductController extends Controller
                     {
                         $products->select('products.id', 'AED', 'SAR', 'USD', 'department_id')->with(
                             [
-                                'department' => function ($department)
+                                'discount' => function ($discount)
                                 {
-                                    $department->select('id')->with(
+                                    $discount->select('discount', 'department_discounts.department_id')->where(
                                         [
-                                            'discount' => function ($discount)
-                                            {
-                                                $discount->select('discount', 'department_id')->where(
-                                                    [
-                                                        ['end', '>=', Carbon::today()],
-                                                        ['start', '<=', Carbon::today()]
-                                                    ]
-                                                );
-                                            }
+                                            ['end', '>=', Carbon::today()],
+                                            ['start', '<=', Carbon::today()]
                                         ]
                                     );
                                 },
@@ -110,66 +95,113 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getBestSellerProducts(ProductRequest $request)
-    {
-        try 
-        {
-            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
-                [
-                    'department' => function ($department)
-                    {
-                        $department->select('id')->with(
-                            [
-                                'discount' => function ($discount)
-                                {
-                                    $discount->select('discount', 'department_id')->where(
-                                        [
-                                            ['end', '>=', Carbon::today()],
-                                            ['start', '<=', Carbon::today()]
-                                        ]
-                                    );
-                                }
-                            ]
-                        );
-                    },
-                    'translations' => function ($translation) 
-                    {
-                        $translation->select('name', 'product_id', 'locale');
-                    }
-                ]
-            )->withSum('orders AS bestSeller', 'order_product.quantity')->orderby('bestSeller', 'DESC')->limit($request->limit)->whereHas('orders')->get();
-            return $this->makeResponse("Success", 200, "These Are All Products From Best Seller To worse Seller", $products);
-        }
-        catch (Exception $e) 
-        {
-            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
-        }
-    }
+    // public function getBestSellerProducts(ProductRequest $request)
+    // {
+    //     try 
+    //     {
+    //         $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
+    //             [
+    //                 'discount' => function ($discount)
+    //                 {
+    //                     $discount->select('discount', 'department_discounts.department_id')->where(
+    //                         [
+    //                             ['end', '>=', Carbon::today()],
+    //                             ['start', '<=', Carbon::today()]
+    //                         ]
+    //                     );
+    //                 },
+    //                 'translations' => function ($translation) 
+    //                 {
+    //                     $translation->select('name', 'product_id', 'locale');
+    //                 }
+    //             ]
+    //         )->withAvg('users AS rate', 'product_user.rate')->withSum('orders AS bestSeller', 'order_product.quantity')->orderby('bestSeller', 'DESC')->whereHas('orders')->limit($request->limit)->get();
+    //         return $this->makeResponse("Success", 200, "These Are All Products From Best Seller To worse Seller", $products);
+    //     }
+    //     catch (Exception $e) 
+    //     {
+    //         return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+    //     }
+    // }
     
     /**
      * Get All Products From Top Rated To Low Rated.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getTopRatedProducts(ProductRequest $request)
+    // public function getTopRatedProducts(ProductRequest $request)
+    // {
+    //     try 
+    //     {
+    //         $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
+    //             [
+    //                 'discount' => function ($discount)
+    //                 {
+    //                     $discount->select('discount', 'department_discounts.department_id')->where(
+    //                         [
+    //                             ['end', '>=', Carbon::today()],
+    //                             ['start', '<=', Carbon::today()]
+    //                         ]
+    //                     );
+    //                 },
+    //                 'translations' => function ($translation) 
+    //                 {
+    //                     $translation->select('name', 'product_id', 'locale');
+    //                 }
+    //             ]
+    //         )->withAvg('users AS rate', 'product_user.rate')->orderby('rate', 'DESC')->limit($request->limit)->whereHas('users')->get();
+    //         return $this->makeResponse("Success", 200, "These Are All Products From Top Rated To Low Rated", $products);
+    //     }
+    //     catch (Exception $e) 
+    //     {
+    //         return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+    //     }
+    // }
+    
+    /**
+     * Get All Products That The User Is Looking For.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function searchProducts(ProductRequest $request)
     {
         try 
         {
-            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
+            $products = Product::select('id', 'imageUrl', 'department_id')->with(
                 [
-                    'department' => function ($department)
+                    'translations' => function ($translation) use($request)
                     {
-                        $department->select('id')->with(
+                        $translation->select('name', 'product_id', 'locale');
+                    }
+                ]
+            )->whereTranslationLike('name', '%' . $request->search . '%')->get();
+            return $this->makeResponse("Success", 200, "These Are All Products You Are Looking For", $products);
+        }
+        catch (Exception $e) 
+        {
+            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+        }
+    }
+
+    
+    /**
+     * Get All Products.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getProducts(ProductRequest $request)
+    {
+        try 
+        {
+            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')
+            ->with(
+                [
+                    'discount' => function ($discount)
+                    {
+                        $discount->select('discount', 'department_discounts.department_id')->where(
                             [
-                                'discount' => function ($discount)
-                                {
-                                    $discount->select('discount', 'department_id')->where(
-                                        [
-                                            ['end', '>=', Carbon::today()],
-                                            ['start', '<=', Carbon::today()]
-                                        ]
-                                    );
-                                }
+                                ['end', '>=', Carbon::today()],
+                                ['start', '<=', Carbon::today()]
                             ]
                         );
                     },
@@ -178,29 +210,23 @@ class ProductController extends Controller
                         $translation->select('name', 'product_id', 'locale');
                     }
                 ]
-            )->withAvg('users AS rate', 'product_user.rate')->orderby('rate', 'DESC')->limit($request->limit)->whereHas('users')->get();
-            return $this->makeResponse("Success", 200, "These Are All Products From Top Rated To Low Rated", $products);
-        }
-        catch (Exception $e) 
-        {
-            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
-        }
-    }
-    
-    /**
-     * Get All Products That The User Is Looking For.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function searchProducts(Request $request)
-    {
-        try 
-        {
-            $validator = Validator::make($request->all(), ['search' => 'required|string']);
-            if ($validator->fails()) 
-                return $this->makeResponse("Faild", 422, "InVailed Inputs", $validator->errors());
-            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'department_id')->whereTranslationLike('name', '%' . $request->search . '%', app()->getLocale())->get();
-            return $this->makeResponse("Success", 200, "These Are All Products You Are Looking For", $products);
+            )
+            ->withSum('orders AS salesCount', 'order_product.quantity')
+            ->withAvg('users AS rate', 'product_user.rate')
+            ->whereTranslationLike('name', '%' . $request->search . '%')
+            ->where(
+                function ($query) use($request)
+                {
+                    if (isset($request->categories))
+                    {
+                        $query->whereIn('department_id', $request->categories);
+                        if (in_array(null, $request->categories))
+                            $query->orWhereNull('department_id');
+                    }
+                }
+            )
+            ->orderby($request->sort, $request->order)->paginate($request->limit);
+            return $this->makeResponse("Success", 200, "These Are All Products", $products);
         }
         catch (Exception $e) 
         {

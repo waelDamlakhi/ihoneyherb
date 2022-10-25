@@ -39,10 +39,10 @@ class DepartmentDiscountController extends Controller
                 ]
             )->get();
             if (COUNT($departmentsDiscounts) > 0) 
-                return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? 'This Date Overlaps With Another Date': 'هذا التاريخ يتداخل مع تاريخ أخر');
+                return $this->makeResponse("Faild", 422, __('CategoryLang.ThisDateOverlapsWithAnotherDate'));
             $request->merge(['discount' => $request->discount / 100]);
             DepartmentDiscount::create($request->all());
-            return $this->makeResponse("Success", 200, "Department Discount Added Successfully", $departmentsDiscounts);
+            return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentDiscountAddedSuccessfully'), $departmentsDiscounts);
         }
         catch (Exception $e) 
         {
@@ -59,10 +59,15 @@ class DepartmentDiscountController extends Controller
     {
         try 
         {
-            $departments = Department::select('id')->whereHas('products')->get();
-            foreach ($departments as $department)
-                $department->makeHidden('translations');
-            return $this->makeResponse("Success", 200, "This All Departments", $departments);
+            $departments = Department::select('id')->with(
+                [
+                    'translations' => function ($translation) 
+                    {
+                        $translation->select('name', 'department_id', 'locale');
+                    }
+                ]
+            )->whereHas('products')->get();
+            return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllDepartments'), $departments);
         }
         catch (Exception $e) 
         {
@@ -91,7 +96,7 @@ class DepartmentDiscountController extends Controller
                     }
                 ]
             )->get();
-            return $this->makeResponse("Success", 200, "This All Departments Discounts", $departmentsDiscounts);
+            return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllDepartmentsDiscounts'), $departmentsDiscounts);
         }
         catch (Exception $e) 
         {
@@ -117,7 +122,7 @@ class DepartmentDiscountController extends Controller
                 ]
             )->find($request->id);
             $departmentDiscount->discount *= 100;
-            return $this->makeResponse("Success", 200, "This Is Department Discount Data", $departmentDiscount);
+            return $this->makeResponse("Success", 200, __('CategoryLang.ThisIsDepartmentDiscountData'), $departmentDiscount);
         }
         catch (Exception $e) 
         {
@@ -153,7 +158,7 @@ class DepartmentDiscountController extends Controller
                     ]
                 )->get();
                 if (COUNT($departmentsDiscounts) > 0) 
-                    return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? 'This Date Overlaps With Another Date': 'هذا التاريخ يتداخل مع تاريخ أخر');
+                    return $this->makeResponse("Faild", 422, __('CategoryLang.ThisDateOverlapsWithAnotherDate'));
             }
             $request->merge(['discount' => $request->discount / 100]);
             $departmentDiscount->update($request->all());
@@ -165,7 +170,7 @@ class DepartmentDiscountController extends Controller
                     }
                 ]
             );
-            return $this->makeResponse("Success", 200, "Department Discount Updated Successfully", $departmentDiscount);
+            return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentDiscountUpdatedSuccessfully'), $departmentDiscount);
         }
         catch (Exception $e) 
         {
@@ -184,7 +189,7 @@ class DepartmentDiscountController extends Controller
         {
             $departmentDiscount = DepartmentDiscount::find($request->id);
             $departmentDiscount->delete();
-            return $this->makeResponse("Success", 200, "Department Discount Deleted Successfully");
+            return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentDiscountDeletedSuccessfully'));
         }
         catch (Exception $e) 
         {

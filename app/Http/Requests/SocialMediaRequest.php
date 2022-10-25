@@ -67,38 +67,22 @@ class SocialMediaRequest extends FormRequest
      */
     public function messages()
     {
-        return app()->getLocale() == 'en' ? 
+        return
         [
-            'id.required' => 'The Id Field Is Required.',
-            'id.integer' => 'The Id Must Be a Integer.',
-            'id.exists' => 'This Id Is Invalid.',
-            'photo.mimetypes' => 'The Photo Extension Must Be SVG.',
-            'photoName.required_without' => 'The Social Media Photo Field Is Required.',
-            'photoName.string' => 'The Social Media Photo Name must be a String.',
-            'type.required' => 'The Social Media Type Field Is Required.',
-            'type.string' => 'The Social Media Type Must Be a String.',
-            'type.in' => 'The Social Media Type Must Be One Of These (tel, email, application).',
-            'info.required' => 'The Social Media Field Is Required.',
-            'info.numeric' => 'The Social Media Must Be a Numeric.',
-            'info.email' => 'The Social Media Must Be a Email Address.',
-            'info.string' => 'The Social Media Must Be a String.',
-            'info.unique' => 'The Social Media Has Already Been Taken.'
-        ] : 
-        [
-            'id.required' => 'رقم المعرف مطلوب.',
-            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
-            'id.exists' => 'هذا الرقم غير صحيح.',
-            'photo.mimetypes' => '.SVG يجب أن يكون امتداد الصورة ',
-            'photoName.required_without' => 'صورة وسيلة التواصل مطلوبة.',
-            'photoName.string' => 'يجب أن يكون اسم صورة وسيلة التواصل من نوع نصي..',
-            'type.required' => 'نوع وسيلة التواصل مطلوب.',
-            'type.string' => 'يجب أن يكون نوع وسيلة التواصل من نوع نصي.',
-            'type.in' => 'يجب أن يكون نوع وسيلة التواصل احدى هذه الأنواع (هاتف, بريد الكتروني, تطبيق).',
-            'info.required' => 'وسيلة التواصل مطلوبة.',
-            'info.numeric' => 'يجب أن تكون وسيلة التواصل من نوع رقمي.',
-            'info.email' => 'يجب أن تكون وسيلة التواصل من نوع بريد الكتروني.',
-            'info.string' => 'يجب أن تكون وسيلة التواصل من نوع نصي.',
-            'info.unique' => 'وسيلة التواصل موجودة مسبقا.'
+            'id.required' => __('SocialMediaLang.TheIdFieldIsRequired'),
+            'id.integer' => __('SocialMediaLang.TheIdMustBeAInteger'),
+            'id.exists' => __('SocialMediaLang.ThisIdIsInvalid'),
+            'photo.mimetypes' => __('SocialMediaLang.ThePhotoExtensionMustBeSVG'),
+            'photoName.required_without' => __('SocialMediaLang.TheSocialMediaPhotoFieldIsRequired'),
+            'photoName.string' => __('SocialMediaLang.TheSocialMediaPhotoNameMustBeAString'),
+            'type.required' => __('SocialMediaLang.TheSocialMediaTypeFieldIsRequired'),
+            'type.string' => __('SocialMediaLang.TheSocialMediaTypeMustBeAString'),
+            'type.in' => __('SocialMediaLang.TheSocialMediaTypeMustBeOneOfThese(tel,email,application)'),
+            'info.required' => __('SocialMediaLang.TheSocialMediaFieldIsRequired'),
+            'info.numeric' => __('SocialMediaLang.TheSocialMediaustBeANumeric'),
+            'info.email' => __('SocialMediaLang.TheSocialMediaMustBeAEmailAddress'),
+            'info.string' => __('SocialMediaLang.TheSocialMediaMustBeAString'),
+            'info.unique' => __('SocialMediaLang.TheSocialMediaHasAlreadyBeenTaken')
         ];
     }
 

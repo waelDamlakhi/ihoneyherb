@@ -68,7 +68,15 @@ class ProductRequest extends FormRequest
         }
         else 
         {
-            $rules['limit'] = 'nullable|integer';
+            if (Str::contains($this->path(), 'products')) 
+                $rules = [
+                    'limit' => 'required|integer',
+                    'sort' => 'required|string|in:id,salesCount,rate,AED,SAR,USD',
+                    'order' => 'required|string|in:DESC,ASC',
+                    'categories' => 'nullable|array',
+                    'categories.*' => 'nullable|integer|exists:departments,id',
+                ];
+            $rules['search'] = 'nullable|string';
         }
         return $rules;
     }

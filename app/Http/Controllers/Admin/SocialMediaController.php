@@ -32,7 +32,7 @@ class SocialMediaController extends Controller
         {
             $request->request->add($request->hasFile('photo') ? $this->uploadFiles($request->file('photo')) : ['imageUrl' => $request->photoName]);
             SocialMedia::create($request->all());
-            return $this->makeResponse("Success", 200, "Social Media Added Successfully");
+            return $this->makeResponse("Success", 200, __('SocialMediaLang.SocialMediaAddedSuccessfully'));
         }
         catch (Exception $e) 
         {
@@ -57,7 +57,7 @@ class SocialMediaController extends Controller
                     }
                 ]
             )->get();
-            return $this->makeResponse("Success", 200, "This All Social Media", $socialMedia);
+            return $this->makeResponse("Success", 200, __('SocialMediaLang.TheseAreAllSocialMedia'), $socialMedia);
         }
         catch (Exception $e) 
         {
@@ -75,7 +75,7 @@ class SocialMediaController extends Controller
         try 
         {
             $socialMedia = SocialMedia::find($request->id);
-            return $this->makeResponse("Success", 200, "This is Social Media Data", $socialMedia);
+            return $this->makeResponse("Success", 200, __('SocialMediaLang.ThisIsSocialMediaData'), $socialMedia);
         }
         catch (Exception $e) 
         {
@@ -110,7 +110,7 @@ class SocialMediaController extends Controller
                 $request->request->add($this->uploadFiles($request->file('photo')));
             }
             $socialMedia->update($request->all());
-            return $this->makeResponse("Success", 200, "Social Media Updated Successfully", $socialMedia);
+            return $this->makeResponse("Success", 200, __('SocialMediaLang.SocialMediaUpdatedSuccessfully'), $socialMedia);
         }
         catch (Exception $e) 
         {
@@ -133,7 +133,7 @@ class SocialMediaController extends Controller
                 unlink($socialMedia->imagePath);
             }
             $socialMedia->delete();
-            return $this->makeResponse("Success", 200, "Social Media Deleted Successfully");
+            return $this->makeResponse("Success", 200, __('SocialMediaLang.SocialMediaDeletedSuccessfully'));
         }
         catch (Exception $e) 
         {

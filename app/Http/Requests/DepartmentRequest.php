@@ -63,36 +63,21 @@ class DepartmentRequest extends FormRequest
      */
     public function messages()
     {
-        return app()->getLocale() == 'en' ? 
+        return 
         [
-            'id.required' => 'The Id Field Is Required.',
-            'id.integer' => 'The Id Must Be a Integer.',
-            'id.exists' => 'This Id Is Invalid.',
-            'photo.mimetypes' => 'The Photo Extension Must Be One Of These (jpg, jpeg, png).',
-            'photo.required' => 'The Category Photo Field Is Required.',
-            'department_id.integer' => 'The Category Id Must Be a Integer.',
-            'department_id.exists' => 'This Category Id Is Invalid.',
-            'en.name.required' => 'The English Category Name Field Is Required.',
-            'en.name.string' => 'The English Category Name Must Be a String.',
-            'en.name.unique' => 'The English Category Name Has Already Been Taken.',
-            'ar.name.required' => 'The Arabic Category Name Field Is Required.',
-            'ar.name.string' => 'The Arabic Category Name Must Be a String.',
-            'ar.name.unique' => 'The Arabic Category Name Has Already Been Taken.'
-        ] : 
-        [
-            'id.required' => 'رقم المعرف مطلوب.',
-            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
-            'id.exists' => 'هذا الرقم غير صحيح.',
-            'photo.mimetypes' => ' .(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
-            'photo.required' => 'صورة التصنيف مطلوبة.',
-            'department_id.integer' => 'يجب أن يكون رقم التصنيف من نوع رقم صحيح.',
-            'department_id.exists' => 'هذا الرقم غير صحيح.',
-            'en.name.required' => 'اسم التصنيف بالأنكليزية مطلوب.',
-            'en.name.string' => 'يجب أن يكون اسم التصنيف بالأنكليزية من نوع نصي.',
-            'en.name.unique' => 'اسم التصنيف بالأنكليزية موجود مسبقا.',
-            'ar.name.required' => 'اسم التصنيف بالعربية مطلوب.',
-            'ar.name.string' => 'يجب أن يكون اسم التصنيف بالعربية من نوع نصي.',
-            'ar.name.unique' => 'اسم التصنيف بالعربية موجود مسبقا.'
+            'id.required' => __('CategoryLang.TheIdFieldIsRequired'),
+            'id.integer' => __('CategoryLang.TheIdMustBeAInteger'),
+            'id.exists' => __('CategoryLang.ThisIdIsInvalid'),
+            'photo.mimetypes' => __('CategoryLang.ThePhotoExtensionMustBeOneOfThese(jpg,jpeg,png)'),
+            'photo.required' => __('CategoryLang.TheCategoryPhotoFieldIsRequired'),
+            'department_id.integer' => __('CategoryLang.TheCategoryIdMustBeAInteger'),
+            'department_id.exists' => __('CategoryLang.ThisCategoryIdIsInvalid'),
+            'en.name.required' => __('CategoryLang.TheEnglishCategoryNameFieldIsRequired'),
+            'en.name.string' => __('CategoryLang.TheEnglishCategoryNameMustBeAString'),
+            'en.name.unique' => __('CategoryLang.TheEnglishCategoryNameHasAlreadyBeenTaken'),
+            'ar.name.required' => __('CategoryLang.TheArabicCategoryNameFieldIsRequired'),
+            'ar.name.string' => __('CategoryLang.TheArabicCategoryNameMustBeAString'),
+            'ar.name.unique' => __('CategoryLang.TheArabicCategoryNameHasAlreadyBeenTaken')
         ];
     }
 

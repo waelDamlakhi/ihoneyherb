@@ -36,7 +36,7 @@ trait GeneralFunctions {
         $folderPath = public_path('images'); 
         $file->move($folderPath, $fileName);
         return [
-            $fileUrl => env('APP_URL') . '/public/images/' . $fileName,
+            $fileUrl => env('APP_URL') . 'images/' . $fileName,
             $filePath => $folderPath . '\\' . $fileName
         ];
     }
@@ -63,7 +63,7 @@ trait GeneralFunctions {
             $mail->Username = env('MAIL_USERNAME');   //  sender username
             $mail->Password = env('MAIL_PASSWORD');       // sender password
             $mail->SMTPSecure = env('MAIL_ENCRYPTION');                  // encryption - ssl/tls
-            $mail->Port = env('MAIL_PORT');
+            $mail->Port = env('MAIL_PORT', 587);
             $mail->setFrom(env('MAIL_USERNAME'), env('MAIL_FROM_NAME'));
             $mail->addAddress($email); 
 

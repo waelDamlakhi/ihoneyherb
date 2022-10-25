@@ -100,4 +100,12 @@ class Product extends Model implements TranslatableContract
     {
         return $this->hasMany(QuantityAdjustments::class);
     }
+    
+    /**
+     * Get the Discount for the Product Through The Department.
+     */
+    public function discount()
+    {
+        return $this->hasOneThrough(DepartmentDiscount::class, Department::class, 'id');
+    }
 }

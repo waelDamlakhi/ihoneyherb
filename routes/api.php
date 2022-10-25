@@ -25,19 +25,22 @@ Route::controller(AuthController::class)->group(function ()
         Route::get('refresh-token', 'refresh');
         Route::get('logout', 'logout');
     });
+    Route::get('forget-password', 'forgetPassword');
 });
 
 Route::controller(CategoryController::class)->group(function ()
 {
     Route::get('categories-discount', 'getCategoriesDiscount');
     Route::get('primary-categories', 'getPrimaryCategories');
+    Route::get('categories-for-filter', 'getCategoriesForFilter');
 });
 
 Route::controller(ProductController::class)->group(function ()
 {
-    Route::get('new-products', 'getNewProducts');
+    // Route::get('new-products', 'getNewProducts');
     Route::get('banners-products', 'getProductsBanners');
-    Route::get('best-seller-products', 'getBestSellerProducts');
-    Route::get('top-rated-products', 'getTopRatedProducts');
+    // Route::get('best-seller-products', 'getBestSellerProducts');
+    // Route::get('top-rated-products', 'getTopRatedProducts');
     Route::get('search-products', 'searchProducts');
+    Route::get('products', 'getProducts');
 });

@@ -32,7 +32,7 @@ class DepartmentController extends Controller
         {
             $request->request->add($this->uploadFiles($request->file('photo')));
             Department::create($request->all());
-            return $this->makeResponse("Success", 200, "Department Added Successfully");
+            return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentAddedSuccessfully'));
         }
         catch (Exception $e) 
         {
@@ -52,7 +52,7 @@ class DepartmentController extends Controller
             $departments = Department::select('id')->where('department_id', null)->whereDoesntHave('products')->get();
             foreach ($departments as $department)
                 $department->makeHidden('translations');
-            return $this->makeResponse("Success", 200, "This All Primary Departments", $departments);
+            return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllPrimaryDepartments'), $departments);
         }
         catch (Exception $e) 
         {
@@ -81,15 +81,7 @@ class DepartmentController extends Controller
                     }
                 ]
             )->get();
-            // foreach ($departments as $department) 
-            // {
-            //     if (COUNT($department->children) > 0)
-            //         $department->hasChildren = true;
-            //     else
-            //         $department->hasChildren = false;
-            //     $department->makeHidden('children');
-            // }
-            return $this->makeResponse("Success", 200, "This All Departments", $departments);
+            return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllDepartments'), $departments);
         }
         catch (Exception $e) 
         {
@@ -119,7 +111,7 @@ class DepartmentController extends Controller
             else
                 $department->hasChildren = false;
             $department->makeHidden('children');
-            return $this->makeResponse("Success", 200, "This Is Department Data", $department);
+            return $this->makeResponse("Success", 200, __('CategoryLang.ThisIsDepartmentData'), $department);
         }
         catch (Exception $e) 
         {
@@ -158,7 +150,7 @@ class DepartmentController extends Controller
                     }
                 ]
             );
-            return $this->makeResponse("Success", 200, "Department Updated Successfully", $department);
+            return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentUpdatedSuccessfully'), $department);
         }
         catch (Exception $e) 
         {
@@ -179,7 +171,7 @@ class DepartmentController extends Controller
             unlink($department->imagePath);
             $department->deleteTranslations();
             $department->delete();
-            return $this->makeResponse("Success", 200, "Department Deleted Successfully");
+            return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentDeletedSuccessfully'));
         }
         catch (Exception $e) 
         {

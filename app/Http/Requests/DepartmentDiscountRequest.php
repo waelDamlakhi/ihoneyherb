@@ -54,40 +54,23 @@ class DepartmentDiscountRequest extends FormRequest
      */
     public function messages()
     {
-        return app()->getLocale() == 'en' ? 
+        return
         [
-            'id.required' => 'The Id Field Is Required.',
-            'id.integer' => 'The Id Must Be a Integer.',
-            'id.exists' => 'This Id Is Invalid.',
-            'department_id.required' => 'The Category Id Field Is Required.',
-            'department_id.integer' => 'The Category Id Must Be a Integer.',
-            'department_id.exists' => 'This Category Id Is Invalid.',
-            'discount.required' => 'The Dicount Field Is Required.',
-            'discount.numeric' => 'The Dicount Must Be a Numeric.',
-            'discount.max' => 'The Discount Must Not Be Greater Than 100.',
-            'start.required' => 'The Start Date Field Is Required.',
-            'start.date' => 'The Start Date Must Be a Date.',
-            'end.required' => 'The End Date Field Is Required.',
-            'end.date' => 'The End Date Must Be a Date.',
-            'start.after_or_equal' => 'The Start Date Must Be A Date After Or Equal To Today.',
-            'end.after' => 'The End Date Must Be A Date After Start Date.'
-        ] : 
-        [
-            'id.required' => 'رقم المعرف مطلوب.',
-            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
-            'id.exists' => 'هذا الرقم غير صحيح.',
-            'department_id.required' => 'رقم التصنيف مطلوب.',
-            'department_id.integer' => 'يجب أن يكون رقم التصنيف من نوع رقم صحيح.',
-            'department_id.exists' => 'هذا الرقم غير صحيح.',
-            'discount.required' => 'قيمة التخفيض مطلوب.',
-            'discount.numeric' => 'يجب أن تكون قيمة التخفيض من نوع رقمي.',
-            'discount.max' => 'لا يمكن أن تكون قيمة التخفيض أكبر من 100.',
-            'start.required' => 'تاريخ البداية مطلوب.',
-            'start.date' => 'يجب أن يكون تاريخ البداية من نوع تاريخ.',
-            'end.required' => 'تاريخ النهاية مطلوب.',
-            'end.date' => 'يجب أن يكون تاريخ النهاية من نوع تاريخ.',
-            'start.after_or_equal' => 'يجب أن يكون تاريخ البداية أكبر أو يساوي تاريخ اليوم.',
-            'end.after' => 'يجب أن يكون تاريخ النهاية أكبر من تاريخ البداية.'
+            'id.required' => __('CategoryLang.TheIdFieldIsRequired'),
+            'id.integer' => __('CategoryLang.TheIdMustBeAInteger'),
+            'id.exists' => __('CategoryLang.ThisIdIsInvalid'),
+            'department_id.required' => __('CategoryLang.TheCategoryIdFieldIsRequired'),
+            'department_id.integer' => __('CategoryLang.TheCategoryIdMustBeAInteger'),
+            'department_id.exists' => __('CategoryLang.ThisCategoryIdIsInvalid'),
+            'discount.required' => __('CategoryLang.TheDicountFieldIsRequired'),
+            'discount.numeric' => __('CategoryLang.TheDicountMustBeANumeric'),
+            'discount.max' => __('CategoryLang.TheDiscountMustNotBeGreaterThan100'),
+            'start.required' => __('CategoryLang.TheStartDateFieldIsRequired'),
+            'start.date' => __('CategoryLang.TheStartDateMustBeADate'),
+            'end.required' => __('CategoryLang.TheEndDateFieldIsRequired'),
+            'end.date' => __('CategoryLang.TheEndDateMustBeADate'),
+            'start.after_or_equal' => __('CategoryLang.TheStartDateMustBeADateAfterOrEqualToToday'),
+            'end.after' => __('CategoryLang.TheEndDateMustBeADateAfterStartDate')
         ];
     }
 

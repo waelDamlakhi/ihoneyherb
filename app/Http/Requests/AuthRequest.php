@@ -50,38 +50,21 @@ class AuthRequest extends FormRequest
      */
     public function messages()
     {
-        return app()->getLocale() == 'en' ? 
-        [
-            'userName.required' => 'The User Name Field Is Required.',
-            'userName.string' => 'The User Name Must Be a String.',
-            'userName.unique' => 'The User Name Has Already Been Taken.',
-            'password.required' => 'The Password Field Is Required.',
-            'password.string' => 'The Password Must Be a String.',
-            'name.required' => 'The Name Field Is Required.',
-            'name.string' => 'The Name Must Be a String.',
-            'email.required' => 'The Email Address Field Is Required.',
-            'email.email' => 'The Email Must Be a Email Address.',
-            'email.unique' => 'The Email Address Has Already Been Taken.',
-            'tel.required' => 'The Phone Field Is Required.',
-            'tel.numeric' => 'The Phone Must Be a Numeric.',
-            'address.required' => 'The Address Field Is Required.',
-            'address.string' => 'The Address Must Be a String.'
-        ] : 
-        [
-            'userName.required' => 'اسم المستخدم مطلوب.',
-            'userName.string' => 'يجب أن يكون اسم المستخدم نصي.',
-            'userName.unique' => 'اسم المستخدم محجوز مسبقا.',
-            'password.required' => 'كلمة المرور مطلوبة.',
-            'password.string' => 'يجب أن تكون كلمة المرور نصية.',
-            'name.required' => 'الاسم مطلوب.',
-            'name.string' => 'يجب أن يكون الاسم نصي.',
-            'email.required' => 'البريد الالكتروني مطلوب',
-            'email.email' => 'يجب أن يكون البريد الالكتروني صحيح.',
-            'email.unique' => 'البريد الالكتروني محجوز مسبقا.',
-            'tel.required' => 'الهاتف مطلوب.',
-            'tel.numeric' => 'يجب أن يكون الهاتف رقمي.',
-            'address.required' => 'العنوان مطلوب.',
-            'address.string' => 'يجب أن يكون العنوان نصي.'
+        return [
+            'userName.required' => __("AuthLang.TheUserNameFieldIsRequired"),
+            'userName.string' => __("AuthLang.TheUserNameMustBeAString"),
+            'userName.unique' => __("AuthLang.ThisUserNameHasAlreadyBeenTaken"),
+            'password.required' => __("AuthLang.ThePasswordFieldIsRequired"),
+            'password.string' => __("AuthLang.ThePasswordMustBeAString"),
+            'name.required' => __("AuthLang.TheNameFieldIsRequired"),
+            'name.string' => __("AuthLang.TheNameMustBeAString"),
+            'email.required' => __("AuthLang.TheEmailAddressFieldIsRequired"),
+            'email.email' => __("AuthLang.TheEmailMustBeAEmailAddress"),
+            'email.unique' => __("AuthLang.ThisEmailAddressHasAlreadyBeenTaken"),
+            'tel.required' => __("AuthLang.ThePhoneFieldIsRequired"),
+            'tel.numeric' => __("AuthLang.ThePhoneMustBeANumeric"),
+            'address.required' => __("AuthLang.TheAddressFieldIsRequired"),
+            'address.string' => __("AuthLang.TheAddressMustBeAString")
         ];
     }
 
