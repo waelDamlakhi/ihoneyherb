@@ -41,6 +41,6 @@ Route::controller(ProductController::class)->group(function ()
     Route::get('banners-products', 'getProductsBanners');
     // Route::get('best-seller-products', 'getBestSellerProducts');
     // Route::get('top-rated-products', 'getTopRatedProducts');
-    Route::get('search-products', 'searchProducts');
+    Route::get('search-product', 'searchProducts');
     Route::get('products', 'getProducts');
 });

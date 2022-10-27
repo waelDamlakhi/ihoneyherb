@@ -34,8 +34,6 @@ class ProductPictureController extends Controller
             {
                 $productPictures[] = ProductPicture::create(array_merge(['product_id' => $request->product_id], $this->uploadFiles($photo)));
             }
-            // $request->request->add($this->uploadFiles($request->file('photo')));
-            // ProductPicture::create($request->all());
             return $this->makeResponse("Success", 200, "Product Picture Added Successfully", $productPictures);
         }
         catch (Exception $e) 

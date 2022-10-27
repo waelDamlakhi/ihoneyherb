@@ -67,7 +67,14 @@ class QuantityController extends Controller
                     }, 
                     'product' => function ($product) 
                     {
-                        $product->select('id');
+                        $product->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'product_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->get();
@@ -92,7 +99,14 @@ class QuantityController extends Controller
                 [
                     'product' => function ($product) 
                     {
-                        $product->select('id');
+                        $product->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'product_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->find($request->id);
@@ -142,11 +156,18 @@ class QuantityController extends Controller
                 [
                     'product' => function ($product) 
                     {
-                        $product->select('id');
+                        $product->select('id', 'quantity')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'product_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->find($request->id);
-            $oldProduct = Product::find($quantityAdjustment->product->id);
+            $oldProduct = $quantityAdjustment->product;
             if ($quantityAdjustment->operation_type == 'in')
                 $oldProduct->quantity -= $quantityAdjustment->quantity;
             else
@@ -172,7 +193,14 @@ class QuantityController extends Controller
                 [
                     'product' => function ($product) 
                     {
-                        $product->select('id');
+                        $product->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'product_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             );

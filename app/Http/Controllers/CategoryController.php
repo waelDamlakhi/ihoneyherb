@@ -26,7 +26,14 @@ class CategoryController extends Controller
                 [ 
                     'department' => function ($department) 
                     {
-                        $department->select('id', 'imageUrl');
+                        $department->select('id', 'imageUrl')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->where(
@@ -52,7 +59,14 @@ class CategoryController extends Controller
     {
         try 
         {
-            $departments = Department::select('id', 'imageUrl')->where('department_id', null)->whereDoesntHave('products')->limit(7)->get();
+            $departments = Department::select('id', 'imageUrl')->with(
+                [
+                    'translations' => function ($translation) 
+                    {
+                        $translation->select('name', 'department_id', 'locale');
+                    }
+                ]
+            )->where('department_id', null)->whereDoesntHave('products')->limit(7)->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllPrimaryDepartments'), $departments);
         }
         catch (Exception $e) 

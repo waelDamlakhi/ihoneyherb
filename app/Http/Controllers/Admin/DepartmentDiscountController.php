@@ -92,7 +92,14 @@ class DepartmentDiscountController extends Controller
                     }, 
                     'department' => function ($department) 
                     {
-                        $department->select('id');
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->get();
@@ -117,7 +124,14 @@ class DepartmentDiscountController extends Controller
                 [ 
                     'department' => function ($department) 
                     {
-                        $department->select('id');
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->find($request->id);
@@ -143,7 +157,14 @@ class DepartmentDiscountController extends Controller
                 [ 
                     'department' => function ($department) 
                     {
-                        $department->select('id');
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->find($request->id);
@@ -166,7 +187,14 @@ class DepartmentDiscountController extends Controller
                 [
                     'department' => function ($department) 
                     {
-                        $department->select('id');
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             );

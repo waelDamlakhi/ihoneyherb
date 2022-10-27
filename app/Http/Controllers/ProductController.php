@@ -7,47 +7,12 @@ use App\Models\Banner;
 use App\Models\Product;
 use Illuminate\Support\Carbon;
 use App\Traits\GeneralFunctions;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
     use GeneralFunctions;
-    
-    /**
-     * Get All Products From Newest To Oldest.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // public function getNewProducts(ProductRequest $request)
-    // {
-    //     try 
-    //     {
-    //         $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
-    //             [
-    //                 'discount' => function ($discount)
-    //                 {
-    //                     $discount->select('discount', 'department_discounts.department_id')->where(
-    //                         [
-    //                             ['end', '>=', Carbon::today()],
-    //                             ['start', '<=', Carbon::today()]
-    //                         ]
-    //                     );
-    //                 },
-    //                 'translations' => function ($translation) 
-    //                 {
-    //                     $translation->select('name', 'product_id', 'locale');
-    //                 }
-    //             ]
-    //         )->withAvg('users AS rate', 'product_user.rate')->orderby('id', 'DESC')->limit($request->limit)->get();
-    //         return $this->makeResponse("Success", 200, "These Are All Products From Newest To Oldest", $products);
-    //     }
-    //     catch (Exception $e) 
-    //     {
-    //         return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
-    //     }
-    // }
     
     /**
      * Get All Products Banners.
@@ -64,12 +29,19 @@ class ProductController extends Controller
                     {
                         $products->select('products.id', 'AED', 'SAR', 'USD', 'department_id')->with(
                             [
-                                'discount' => function ($discount)
+                                'department' => function ($department)
                                 {
-                                    $discount->select('discount', 'department_discounts.department_id')->where(
+                                    $department->select('id')->with(
                                         [
-                                            ['end', '>=', Carbon::today()],
-                                            ['start', '<=', Carbon::today()]
+                                            'discount' => function ($discount)
+                                            {
+                                                $discount->select('discount', 'department_id')->where(
+                                                    [
+                                                        ['end', '>=', Carbon::today()],
+                                                        ['start', '<=', Carbon::today()]
+                                                    ]
+                                                );
+                                            }
                                         ]
                                     );
                                 },
@@ -89,74 +61,6 @@ class ProductController extends Controller
             return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
         }
     }
-
-    /**
-     * Get All Products From Best Seller To worse Seller.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // public function getBestSellerProducts(ProductRequest $request)
-    // {
-    //     try 
-    //     {
-    //         $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
-    //             [
-    //                 'discount' => function ($discount)
-    //                 {
-    //                     $discount->select('discount', 'department_discounts.department_id')->where(
-    //                         [
-    //                             ['end', '>=', Carbon::today()],
-    //                             ['start', '<=', Carbon::today()]
-    //                         ]
-    //                     );
-    //                 },
-    //                 'translations' => function ($translation) 
-    //                 {
-    //                     $translation->select('name', 'product_id', 'locale');
-    //                 }
-    //             ]
-    //         )->withAvg('users AS rate', 'product_user.rate')->withSum('orders AS bestSeller', 'order_product.quantity')->orderby('bestSeller', 'DESC')->whereHas('orders')->limit($request->limit)->get();
-    //         return $this->makeResponse("Success", 200, "These Are All Products From Best Seller To worse Seller", $products);
-    //     }
-    //     catch (Exception $e) 
-    //     {
-    //         return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
-    //     }
-    // }
-    
-    /**
-     * Get All Products From Top Rated To Low Rated.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // public function getTopRatedProducts(ProductRequest $request)
-    // {
-    //     try 
-    //     {
-    //         $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')->with(
-    //             [
-    //                 'discount' => function ($discount)
-    //                 {
-    //                     $discount->select('discount', 'department_discounts.department_id')->where(
-    //                         [
-    //                             ['end', '>=', Carbon::today()],
-    //                             ['start', '<=', Carbon::today()]
-    //                         ]
-    //                     );
-    //                 },
-    //                 'translations' => function ($translation) 
-    //                 {
-    //                     $translation->select('name', 'product_id', 'locale');
-    //                 }
-    //             ]
-    //         )->withAvg('users AS rate', 'product_user.rate')->orderby('rate', 'DESC')->limit($request->limit)->whereHas('users')->get();
-    //         return $this->makeResponse("Success", 200, "These Are All Products From Top Rated To Low Rated", $products);
-    //     }
-    //     catch (Exception $e) 
-    //     {
-    //         return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
-    //     }
-    // }
     
     /**
      * Get All Products That The User Is Looking For.
@@ -196,12 +100,19 @@ class ProductController extends Controller
             $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')
             ->with(
                 [
-                    'discount' => function ($discount)
+                    'department' => function ($department)
                     {
-                        $discount->select('discount', 'department_discounts.department_id')->where(
+                        $department->select('id')->with(
                             [
-                                ['end', '>=', Carbon::today()],
-                                ['start', '<=', Carbon::today()]
+                                'discount' => function ($discount)
+                                {
+                                    $discount->select('discount', 'department_id')->where(
+                                        [
+                                            ['end', '>=', Carbon::today()],
+                                            ['start', '<=', Carbon::today()]
+                                        ]
+                                    );
+                                }
                             ]
                         );
                     },

@@ -63,28 +63,17 @@ class BannerRequest extends FormRequest
      */
     public function messages()
     {
-        return app()->getLocale() == 'en' ? 
+        return
         [
-            'id.required' => 'The Id Field Is Required.',
-            'id.integer' => 'The Id Must Be a Integer.',
-            'id.exists' => 'This Id Is Invalid.',
-            'product_id.required' => 'The Product Id Field Is Required.',
-            'product_id.integer' => 'The Product Id Must Be a Integer.',
-            'product_id.exists' => 'This Product Id Is Invalid.',
-            'product_id.unique' => 'This Product Has Already Been Added To This Banner.',
-            'photo.mimetypes' => 'The Product Banner Photo Extension Must Be One Of These (jpg, jpeg, png).',
-            'photo.required' => 'The Product Photo Field Is Required.'
-        ] : 
-        [
-            'id.required' => 'رقم المعرف مطلوب.',
-            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
-            'id.exists' => 'هذا الرقم غير صحيح.',
-            'product_id.required' => 'رقم المنتج مطلوب.',
-            'product_id.integer' => 'يجب أن يكون رقم المنتج من نوع رقم صحيح.',
-            'product_id.exists' => 'هذا الرقم غير صحيح.',
-            'product_id.unique' => 'تمت إضافة المنتج هذا بالفعل إلى هذا الشعار.',
-            'photo.mimetypes' => '.(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
-            'photo.required' => 'صورة لافتة المننج مطلوبة.'
+            'id.required' => __('BannerLang.TheIdFieldIsRequired'),
+            'id.integer' => __('BannerLang.TheIdMustBeAInteger'),
+            'id.exists' => __('BannerLang.ThisIdIsInvalid'),
+            'product_id.required' => __('BannerLang.TheProductIdFieldIsRequired'),
+            'product_id.integer' => __('BannerLang.TheProductIdMustBeAInteger'),
+            'product_id.exists' => __('BannerLang.ThisProductIdIsInvalid'),
+            'product_id.unique' => __('BannerLang.ThisProductHasAlreadyBeenAddedToThisBanner'),
+            'photo.mimetypes' => __('BannerLang.TheProductBannerPhotoExtensionMustBeOneOfThese(jpg,jpeg,png)'),
+            'photo.required' => __('BannerLang.TheProductPhotoFieldIsRequired')
         ];
     }
 

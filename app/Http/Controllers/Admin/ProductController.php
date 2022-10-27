@@ -33,9 +33,14 @@ class ProductController extends Controller
     {
         try 
         {
-            $departments = Department::select('id')->whereDoesntHave('children')->get();
-            foreach ($departments as $department)
-                $department->makeHidden('translations');
+            $departments = Department::select('id')->with(
+                [
+                    'translations' => function ($translation) 
+                    {
+                        $translation->select('name', 'department_id', 'locale');
+                    }
+                ]
+            )->whereDoesntHave('children')->get();
             return $this->makeResponse("Success", 200, "This All Departments", $departments);
         }
         catch (Exception $e) 
@@ -92,8 +97,16 @@ class ProductController extends Controller
                 [
                     'department' => function ($department)
                     {
-                        $department->select('id');
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
                     },
+                    'translations',
                     'pictures'
                 ]
             )->find($request->id);
@@ -122,8 +135,16 @@ class ProductController extends Controller
                     }, 
                     'department' => function ($department)
                     {
-                        $department->select('id');
-                    }
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
+                    },
+                    'translations'
                 ]
             )->get();
             return $this->makeResponse("Success", 200, "This All Products", $products);
@@ -147,8 +168,16 @@ class ProductController extends Controller
                 [
                     'department' => function ($department)
                     {
-                        $department->select('id');
-                    }
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
+                    },
+                    'translations'
                 ]
             )->find($request->id);
             if (!empty($request->file('photo'))) 
@@ -167,8 +196,16 @@ class ProductController extends Controller
                 [
                     'department' => function ($department)
                     {
-                        $department->select('id');
-                    }
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
+                    },
+                    'translations'
                 ]
             );
             return $this->makeResponse("Success", 200, "Product Updated Successfully", $product);
@@ -188,14 +225,12 @@ class ProductController extends Controller
     {
         try 
         {
-            $product = Product::find($request->id);
-            $productPictures = ProductPicture::where('product_id', $request->id)->get();
-            foreach ($productPictures as $picture) 
+            $product = Product::with('pictures')->find($request->id);
+            foreach ($product->pictures as $picture) 
             {
                 unlink($picture->imagePath);
             }
             unlink($product->imagePath);
-            $product->deleteTranslations();
             $product->delete();
             return $this->makeResponse("Success", 200, "Product Deleted Successfully");
         }

@@ -48,6 +48,6 @@ return [
     'TheEndDateFieldIsRequired' => 'The End Date Field Is Required',
     'TheEndDateMustBeADate' => 'The End Date Must Be a Date',
     'TheStartDateMustBeADateAfterOrEqualToToday' => 'The Start Date Must Be A Date After Or Equal To Today',
-    'TheEndDateMustBeADateAfterStartDate' => 'The End Date Must Be A Date After Start Date',
+    'TheEndDateMustBeADateAfterStartDate' => 'The End Date Must Be A Date After Start Date'
 
 ];

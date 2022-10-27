@@ -49,9 +49,14 @@ class DepartmentController extends Controller
     {
         try 
         {
-            $departments = Department::select('id')->where('department_id', null)->whereDoesntHave('products')->get();
-            foreach ($departments as $department)
-                $department->makeHidden('translations');
+            $departments = Department::select('id')->with(
+                [
+                    'translations' => function ($translation) 
+                    {
+                        $translation->select('name', 'department_id', 'locale');
+                    }
+                ]
+            )->where('department_id', null)->whereDoesntHave('products')->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllPrimaryDepartments'), $departments);
         }
         catch (Exception $e) 
@@ -77,10 +82,21 @@ class DepartmentController extends Controller
                     }, 
                     'parent' => function ($department) 
                     {
-                        $department->select('id');
+                        $department->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
+                    },
+                    'translations' => function ($translation) 
+                    {
+                        $translation->select('name', 'department_id', 'locale');
                     }
                 ]
-            )->get();
+            )->withCount('children AS hasChildren')->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllDepartments'), $departments);
         }
         catch (Exception $e) 
@@ -102,15 +118,21 @@ class DepartmentController extends Controller
                 [
                     'parent' => function ($primaryDepartment) 
                     {
-                        $primaryDepartment->select('id');
+                        $primaryDepartment->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
+                    },
+                    'translations' => function ($translation) 
+                    {
+                        $translation->select('name', 'department_id', 'locale');
                     }
                 ]
-            )->find($request->id);
-            if (COUNT($department->children) > 0)
-                $department->hasChildren = true;
-            else
-                $department->hasChildren = false;
-            $department->makeHidden('children');
+            )->withCount('children AS hasChildren')->find($request->id);
             return $this->makeResponse("Success", 200, __('CategoryLang.ThisIsDepartmentData'), $department);
         }
         catch (Exception $e) 
@@ -132,7 +154,14 @@ class DepartmentController extends Controller
                 [
                     'parent' => function ($primaryDepartment) 
                     {
-                        $primaryDepartment->select('id');
+                        $primaryDepartment->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             )->find($request->id);
@@ -146,7 +175,14 @@ class DepartmentController extends Controller
                 [
                     'parent' => function ($primaryDepartment) 
                     {
-                        $primaryDepartment->select('id');
+                        $primaryDepartment->select('id')->with(
+                            [
+                                'translations' => function ($translation) 
+                                {
+                                    $translation->select('name', 'department_id', 'locale');
+                                }
+                            ]
+                        );
                     }
                 ]
             );
@@ -167,9 +203,8 @@ class DepartmentController extends Controller
     {
         try 
         {
-            $department = Department::with('products')->find($request->id);
+            $department = Department::find($request->id);
             unlink($department->imagePath);
-            $department->deleteTranslations();
             $department->delete();
             return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentDeletedSuccessfully'));
         }

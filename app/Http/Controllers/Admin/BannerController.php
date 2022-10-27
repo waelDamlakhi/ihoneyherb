@@ -40,7 +40,7 @@ class BannerController extends Controller
                     }
                 ]
             )->get();
-            return $this->makeResponse("Success", 200, "These Are All Products", $products);
+            return $this->makeResponse("Success", 200, __('BannerLang.TheseAreAllProducts'), $products);
         }
         catch (Exception $e) 
         {
@@ -58,7 +58,7 @@ class BannerController extends Controller
         try 
         {
             $banners = Banner::select('id', 'name')->get();
-            return $this->makeResponse("Success", 200, "These Are All Banners", $banners);
+            return $this->makeResponse("Success", 200, __('BannerLang.TheseAreAllBanners'), $banners);
         }
         catch (Exception $e) 
         {
@@ -88,9 +88,9 @@ class BannerController extends Controller
                         ]
                     ]
                 );
-                return $this->makeResponse("Success", 200, "Product Banner Added Successfully");
+                return $this->makeResponse("Success", 200, __('BannerLang.ProductBannerAddedSuccessfully'));
             }
-            return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? 'There Is Not Enough Space In This Banner': 'لا توجد مساحة كافية في هذه اللافتة');
+            return $this->makeResponse("Faild", 422, __('BannerLang.ThereIsNotEnoughSpaceInThisBanner'));
         }
         catch (Exception $e) 
         {
@@ -130,7 +130,7 @@ class BannerController extends Controller
                     }
                 ]
             )->get();
-            return $this->makeResponse("Success", 200, "These Are All Products Banners", $productsBanners);
+            return $this->makeResponse("Success", 200, __('BannerLang.TheseAreAllProductsBanners'), $productsBanners);
         }
         catch (Exception $e) 
         {
@@ -166,7 +166,7 @@ class BannerController extends Controller
                     }
                 ]
             )->find($request->id);
-            return $this->makeResponse("Success", 200, "This Is Product Banner Data", $productBanner);
+            return $this->makeResponse("Success", 200, __('BannerLang.ThisIsProductBannerData'), $productBanner);
         }
         catch (Exception $e) 
         {
@@ -207,7 +207,7 @@ class BannerController extends Controller
                 $banner = Banner::withCount(['products AS bannerCount'])->find($request->banner_id);
                 if ($banner->count == $banner->bannerCount) 
                 {
-                    return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? 'There Is Not Enough Space In This Banner': 'لا توجد مساحة كافية في هذه اللافتة');
+                    return $this->makeResponse("Faild", 422, __('BannerLang.ThereIsNotEnoughSpaceInThisBanner'));
                 }
             }
             if (!empty($request->file('photo'))) 
@@ -235,7 +235,7 @@ class BannerController extends Controller
                     }
                 ]
             );
-            return $this->makeResponse("Success", 200, "Product Banner Updated Successfully", $productBanner);
+            return $this->makeResponse("Success", 200, __('BannerLang.ProductBannerUpdatedSuccessfully'), $productBanner);
         }
         catch (Exception $e) 
         {
@@ -255,7 +255,7 @@ class BannerController extends Controller
             $productBanner = BannerProduct::find($request->id);
             unlink($productBanner->bannerPath);
             $productBanner->delete();
-            return $this->makeResponse("Success", 200, "Product Banner Deleted Successfully");
+            return $this->makeResponse("Success", 200, __('BannerLang.ProductBannerDeletedSuccessfully'));
         }
         catch (Exception $e) 
         {
