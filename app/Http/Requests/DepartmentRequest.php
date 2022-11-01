@@ -29,28 +29,35 @@ class DepartmentRequest extends FormRequest
      */
     public function rules()
     {
-        if (Str::contains($this->path(), 'delete-department') || Str::contains($this->path(), 'edit-department')) 
+        if (Str::contains($this->path(), 'admin/api')) 
         {
-            $rules['id'] = 'required|integer|exists:departments,id';
+            if (Str::contains($this->path(), 'delete-department') || Str::contains($this->path(), 'edit-department')) 
+            {
+                $rules['id'] = 'required|integer|exists:departments,id';
+            }
+            else 
+            {
+                if (Str::contains($this->path(), 'update-department'))
+                    $rules = [
+                        'id' => 'required|integer|exists:departments,id',
+                        'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png'
+                    ];
+                else
+                    $rules['photo'] = 'required|mimetypes:image/jpg,image/jpeg,image/png';
+        
+                $rules['department_id'] = 'nullable|integer|exists:departments,id';
+        
+                foreach (config('translatable.locales') as $lang) 
+                    $rules[$lang . ".name"] = [
+                        'required',
+                        'string',
+                        Rule::unique('department_translations', 'name')->ignore($this->id, 'department_id')
+                    ];
+            }
         }
-        else 
+        else
         {
-            if (Str::contains($this->path(), 'update-department'))
-                $rules = [
-                    'id' => 'required|integer|exists:departments,id',
-                    'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png'
-                ];
-            else
-                $rules['photo'] = 'required|mimetypes:image/jpg,image/jpeg,image/png';
-    
-            $rules['department_id'] = 'nullable|integer|exists:departments,id';
-    
-            foreach (config('translatable.locales') as $lang) 
-                $rules[$lang . ".name"] = [
-                    'required',
-                    'string',
-                    Rule::unique('department_translations', 'name')->ignore($this->id, 'department_id')
-                ];
+            $rules['limit'] = 'nullable|integer';
         }
 
         return $rules;
@@ -77,7 +84,8 @@ class DepartmentRequest extends FormRequest
             'en.name.unique' => __('CategoryLang.TheEnglishCategoryNameHasAlreadyBeenTaken'),
             'ar.name.required' => __('CategoryLang.TheArabicCategoryNameFieldIsRequired'),
             'ar.name.string' => __('CategoryLang.TheArabicCategoryNameMustBeAString'),
-            'ar.name.unique' => __('CategoryLang.TheArabicCategoryNameHasAlreadyBeenTaken')
+            'ar.name.unique' => __('CategoryLang.TheArabicCategoryNameHasAlreadyBeenTaken'),
+            'limit.integer' => __('CategoryLang.TheLimitMustBeAInteger')
         ];
     }
 

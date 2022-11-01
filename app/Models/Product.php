@@ -27,16 +27,17 @@ class Product extends Model implements TranslatableContract
         'imagePath',
         'admin_id',
         'department_id',
+        'unit_id'
     ];
     public $translatedAttributes = [
         'name',
-        'unit',
-        'description',
+        'description'
     ];
     
     protected $hidden = [
         'admin_id', 
         'department_id',
+        'unit_id'
     ];
 
     /**
@@ -53,6 +54,14 @@ class Product extends Model implements TranslatableContract
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+    
+    /**
+     * Get the unit that owns the Products.
+     */
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
     }
     
     /**

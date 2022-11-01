@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductPictureController;
 use App\Http\Controllers\Admin\QuantityController;
 use App\Http\Controllers\Admin\SocialMediaController;
+use App\Http\Controllers\Admin\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,15 @@ use App\Http\Controllers\Admin\SocialMediaController;
 */
 
 Route::post('login', [AuthController::class, 'login']);
+
+Route::controller(UnitController::class)->group(function ()
+{
+    Route::post('create-unit', 'create');
+    Route::get('units', 'read');
+    Route::get('edit-unit', 'edit');
+    Route::post('update-unit', 'update');
+    Route::delete('delete-unit', 'delete');
+});
 
 Route::controller(DepartmentController::class)->group(function ()
 {

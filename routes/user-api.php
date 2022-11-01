@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\User\AddressController;
 use App\Http\Controllers\User\PhoneController;
+use App\Http\Controllers\User\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +44,9 @@ Route::controller(AddressController::class)->group(function ()
     Route::delete('delete-address', 'delete');
     Route::put('update-address', 'update');
     Route::put('set-address-default', 'setAddressDefault');
+});
+
+Route::controller(ProductController::class)->group(function ()
+{
+    Route::post('create-comment', 'create');
 });

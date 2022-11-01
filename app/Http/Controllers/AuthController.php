@@ -123,11 +123,11 @@ class AuthController extends Controller
         {
             $user = Auth::guard($request->guard)->user();
             if ($user['emailValidation'])
-                return $this->makeResponse('Failed', 422, __("AuthLang.ConfirmedYourEmail"));
+                throw new Exception(__('AuthLang.ConfirmedYourEmail'), 422);
             if ($user['emailCode'] != $request->code)
-                return $this->makeResponse('Failed', 422, __("AuthLang.InvalidVerificationCode"));
+                throw new Exception(__('AuthLang.InvalidVerificationCode'), 422);
             if ($user['codeExpirationDate'] < Carbon::now()) 
-                return $this->makeResponse('Failed', 422, __("AuthLang.VerificationCodeTimedOut"));
+                throw new Exception(__('AuthLang.VerificationCodeTimedOut'), 422);
             $client = User::find($user['id']);
             $client->emailValidation = true;
             $client->save();
@@ -150,9 +150,9 @@ class AuthController extends Controller
         {
             $user = Auth::guard($request->guard)->user();
             if ($user['emailValidation'])
-                return $this->makeResponse('Failed', 422, __("AuthLang.ConfirmedYourEmail"));
+                throw new Exception(__('AuthLang.ConfirmedYourEmail'), 422);
             if ($user['codeExpirationDate'] >= Carbon::now()) 
-                return $this->makeResponse('Failed', 422, __("AuthLang.VerificationCodeHasNotExpired"));
+                throw new Exception(__('AuthLang.VerificationCodeHasNotExpired'), 422);
             $emailCode = random_int(100000, 999999);
             $response = $this->sendMail($user->email, "emailVerificationCode", ['subject' => 'Email Verification Code', 'name' => $user->name, 'code' => $emailCode]);
             if (is_object($response))
@@ -207,7 +207,7 @@ class AuthController extends Controller
             {
                 $user = Admin::where('email', $request->email)->first();
                 if (!$user) 
-                    return $this->makeResponse('Failed', 422, __("AuthLang.ThisEmailIsNotExist"));
+                    throw new Exception(__('AuthLang.ThisEmailIsNotExist'), 422);
                 else
                     $token = Auth::guard('admin-api')->setTTL($ttl)->login($user);
             }

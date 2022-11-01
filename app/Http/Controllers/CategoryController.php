@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Traits\GeneralFunctions;
 use App\Models\DepartmentDiscount;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DepartmentRequest;
 
 class CategoryController extends Controller
 {
@@ -51,23 +52,34 @@ class CategoryController extends Controller
     }
     
     /**
-     * Get All Primary Categories.
+     * Get All Parent Categories.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getPrimaryCategories()
+    public function getParentCategories(DepartmentRequest $request)
     {
         try 
         {
-            $departments = Department::select('id', 'imageUrl')->with(
-                [
-                    'translations' => function ($translation) 
-                    {
-                        $translation->select('name', 'department_id', 'locale');
-                    }
-                ]
-            )->where('department_id', null)->whereDoesntHave('products')->limit(7)->get();
+            $departments = Department::select('id', 'imageUrl')->withCount(['children AS childCount'])->with('translations')->where('department_id', null)->limit($request->limit)->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllPrimaryDepartments'), $departments);
+        }
+        catch (Exception $e) 
+        {
+            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+        }
+    }
+    
+    /**
+     * Get All Child Categories.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getChildCategories()
+    {
+        try 
+        {
+            $departments = Department::select('id', 'imageUrl')->with('translations')->where('department_id', '!=', null)->get();
+            return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllChildDepartments'), $departments);
         }
         catch (Exception $e) 
         {

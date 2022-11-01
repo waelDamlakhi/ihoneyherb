@@ -17,10 +17,11 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->foreignId('admin_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
+            $table->foreignId('unit_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->float('AED', 8, 2);
             $table->float('USD', 8, 2);
             $table->float('SAR', 8, 2);
-            $table->integer('quantity');
+            $table->float('quantity', 8, 2);
             $table->string('imageUrl');
             $table->string('imagePath');
         });

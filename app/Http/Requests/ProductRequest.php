@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Unit;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
@@ -37,22 +38,10 @@ class ProductRequest extends FormRequest
             }
             else
             {
-                if (Str::contains($this->path(), 'update-product'))
-                    $rules = [
-                        'id' => 'required|integer|exists:products,id',
-                        'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png',
-                    ];
-                else
-                {
-                    $rules = [
-                        'quantity' => 'required|integer',
-                        'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
-                        'otherPhoto.*' => 'mimetypes:image/jpg,image/jpeg,image/png'
-                    ];
-                }
-                $rules += [
+                $rules = [
                     'AED' => 'required|numeric',
-                    'department_id' => 'nullable|integer|exists:departments,id'
+                    'department_id' => 'nullable|integer|exists:departments,id',
+                    'unit_id' => 'required|integer|exists:units,id',
                 ];
                 foreach (config('translatable.locales') as $lang) 
                     $rules += [
@@ -61,22 +50,53 @@ class ProductRequest extends FormRequest
                             'string',
                             Rule::unique('product_translations', 'name')->ignore($this->id, 'product_id')
                         ],
-                        $lang . ".unit" => 'required|string',
                         $lang . ".description" => 'required|string'
                     ];
+                if (Str::contains($this->path(), 'update-product'))
+                    $rules += [
+                        'id' => 'required|integer|exists:products,id',
+                        'photo' => 'nullable|mimetypes:image/jpg,image/jpeg,image/png',
+                    ];
+                else
+                {
+                    $unit = Unit::select('type')->find($this->unit_id);
+                    $type = is_object($unit) ? $unit->type : 'decimal';
+                    $rules += [
+                        'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
+                        'otherPhoto.*' => 'mimetypes:image/jpg,image/jpeg,image/png',
+                        'quantity' => [
+                            'required',
+                            Rule::when($type == 'decimal', 'numeric'),
+                            Rule::when($type == 'integer', 'integer')
+                        ]
+                    ];
+                }
             }
+        }
+        elseif (Str::contains($this->path(), 'user/api')) 
+        {
+            $rules = [
+                'product_id' => 'required|integer|exists:products,id',
+                'rate' => 'required|integer|min:1|max:5',
+                'comment' => 'required|string'
+            ];
         }
         else 
         {
-            if (Str::contains($this->path(), 'products')) 
-                $rules = [
-                    'limit' => 'required|integer',
-                    'sort' => 'required|string|in:id,salesCount,rate,AED,SAR,USD',
-                    'order' => 'required|string|in:DESC,ASC',
-                    'categories' => 'nullable|array',
-                    'categories.*' => 'nullable|integer|exists:departments,id',
-                ];
-            $rules['search'] = 'nullable|string';
+            if (Str::contains($this->path(), 'product-details'))
+                $rules['id'] = 'required|integer|exists:products,id';
+            else 
+            {
+                if (Str::contains($this->path(), 'products')) 
+                    $rules = [
+                        'limit' => 'required|integer',
+                        'sort' => 'required|string|in:id,salesCount,rate,AED,SAR,USD',
+                        'order' => 'required|string|in:DESC,ASC',
+                        'categories' => 'nullable|array',
+                        'categories.*' => 'nullable|integer|exists:departments,id',
+                    ];
+                $rules['search'] = 'nullable|string';
+            }
         }
         return $rules;
     }

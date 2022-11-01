@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SocialMediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,16 +32,20 @@ Route::controller(AuthController::class)->group(function ()
 Route::controller(CategoryController::class)->group(function ()
 {
     Route::get('categories-discount', 'getCategoriesDiscount');
-    Route::get('primary-categories', 'getPrimaryCategories');
+    Route::get('parent-categories', 'getParentCategories');
+    Route::get('child-categories', 'getChildCategories');
     Route::get('categories-for-filter', 'getCategoriesForFilter');
 });
 
 Route::controller(ProductController::class)->group(function ()
 {
-    // Route::get('new-products', 'getNewProducts');
     Route::get('banners-products', 'getProductsBanners');
-    // Route::get('best-seller-products', 'getBestSellerProducts');
-    // Route::get('top-rated-products', 'getTopRatedProducts');
     Route::get('search-product', 'searchProducts');
     Route::get('products', 'getProducts');
+    Route::get('product-details', 'getProductDetails');
+});
+
+Route::controller(SocialMediaController::class)->group(function ()
+{
+    Route::get('follow-us', 'getFollowUs');
 });

@@ -39,7 +39,7 @@ class DepartmentDiscountController extends Controller
                 ]
             )->get();
             if (COUNT($departmentsDiscounts) > 0) 
-                return $this->makeResponse("Faild", 422, __('CategoryLang.ThisDateOverlapsWithAnotherDate'));
+                throw new Exception(__('CategoryLang.ThisDateOverlapsWithAnotherDate'), 422);
             $request->merge(['discount' => $request->discount / 100]);
             DepartmentDiscount::create($request->all());
             return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentDiscountAddedSuccessfully'), $departmentsDiscounts);
@@ -179,7 +179,7 @@ class DepartmentDiscountController extends Controller
                     ]
                 )->get();
                 if (COUNT($departmentsDiscounts) > 0) 
-                    return $this->makeResponse("Faild", 422, __('CategoryLang.ThisDateOverlapsWithAnotherDate'));
+                    throw new Exception(__('CategoryLang.ThisDateOverlapsWithAnotherDate'), 422);
             }
             $request->merge(['discount' => $request->discount / 100]);
             $departmentDiscount->update($request->all());

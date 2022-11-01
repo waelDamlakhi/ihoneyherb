@@ -17,7 +17,7 @@ class CreateQuantityAdjustmentsTable extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('admin_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('quantity');
+            $table->float('quantity', 8, 2);
             $table->enum('operation_type', ['in', 'out']);
             $table->text('description')->nullable();
             $table->timestamps();

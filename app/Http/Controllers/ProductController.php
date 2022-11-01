@@ -86,7 +86,6 @@ class ProductController extends Controller
             return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
         }
     }
-
     
     /**
      * Get All Products.
@@ -138,6 +137,55 @@ class ProductController extends Controller
             )
             ->orderby($request->sort, $request->order)->paginate($request->limit);
             return $this->makeResponse("Success", 200, "These Are All Products", $products);
+        }
+        catch (Exception $e) 
+        {
+            return $this->makeResponse("Faild", $e->getCode(), $e->getmessage());
+        }
+    }
+    
+    /**
+     * Get Product Details.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getProductDetails(ProductRequest $request)
+    {
+        try 
+        {
+            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id', 'unit_id')
+            ->with(
+                [
+                    'department' => function ($department)
+                    {
+                        $department->select('id')->with(
+                            [
+                                'discount' => function ($discount)
+                                {
+                                    $discount->select('discount', 'department_id')->where(
+                                        [
+                                            ['end', '>=', Carbon::today()],
+                                            ['start', '<=', Carbon::today()]
+                                        ]
+                                    );
+                                }
+                            ]
+                        );
+                    },
+                    'pictures',
+                    'users' => function ($rate)
+                    {
+                        $rate->select('name');
+                    },
+                    'translations',
+                    'unit' => function ($unit)
+                    {
+                        $unit->with('translations');
+                    }
+                ]
+            )->find($request->id);
+            // ->withAvg('users AS rate', 'product_user.rate')
+            return $this->makeResponse("Success", 200, "These Are Product Details", $products);
         }
         catch (Exception $e) 
         {

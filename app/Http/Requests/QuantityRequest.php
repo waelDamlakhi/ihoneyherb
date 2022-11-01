@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use App\Traits\GeneralFunctions;
 
 class QuantityRequest extends FormRequest
@@ -36,13 +38,25 @@ class QuantityRequest extends FormRequest
         }
         else 
         {
+            $product = Product::select('id')->with(
+                [
+                    'unit' => function ($unit)
+                    {
+                        $unit->select('type');
+                    }
+                ]
+            )->find($this->product_id);
             if (Str::contains($this->path(), 'update-quantityAdjustmentOperation'))
                 $rules['id'] = 'required|integer|exists:quantity_adjustments,id';
             $rules += [
                 'product_id' => 'required|integer|exists:products,id',
-                'quantity' => 'required|integer',
                 'operation_type' => 'required|in:out,in',
                 'description' => 'nullable',
+                'quantity' => [
+                    'required',
+                    Rule::when($product->unit->type == 'decimal', 'numeric'),
+                    Rule::when($product->unit->type == 'integer', 'integer')
+                ]
             ];
         }
         return $rules;

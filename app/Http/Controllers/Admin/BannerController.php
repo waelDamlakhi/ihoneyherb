@@ -90,7 +90,7 @@ class BannerController extends Controller
                 );
                 return $this->makeResponse("Success", 200, __('BannerLang.ProductBannerAddedSuccessfully'));
             }
-            return $this->makeResponse("Faild", 422, __('BannerLang.ThereIsNotEnoughSpaceInThisBanner'));
+            throw new Exception(__('BannerLang.ThereIsNotEnoughSpaceInThisBanner'), 422);
         }
         catch (Exception $e) 
         {
@@ -207,7 +207,7 @@ class BannerController extends Controller
                 $banner = Banner::withCount(['products AS bannerCount'])->find($request->banner_id);
                 if ($banner->count == $banner->bannerCount) 
                 {
-                    return $this->makeResponse("Faild", 422, __('BannerLang.ThereIsNotEnoughSpaceInThisBanner'));
+                    throw new Exception(__('BannerLang.ThereIsNotEnoughSpaceInThisBanner'), 422);
                 }
             }
             if (!empty($request->file('photo'))) 

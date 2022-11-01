@@ -10,6 +10,7 @@ use App\Traits\GeneralFunctions;
 use App\Models\QuantityAdjustments;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\Unit;
 
 class ProductController extends Controller
 {
@@ -93,7 +94,7 @@ class ProductController extends Controller
     {
         try 
         {
-            $product = Product::select('id', 'AED', 'quantity', 'imageUrl', 'department_id')->with(
+            $product = Product::select('id', 'AED', 'quantity', 'imageUrl', 'department_id', 'unit_id')->with(
                 [
                     'department' => function ($department)
                     {
@@ -107,7 +108,11 @@ class ProductController extends Controller
                         );
                     },
                     'translations',
-                    'pictures'
+                    'pictures',
+                    'unit' => function ($unit)
+                    {
+                        $unit->with('translations');
+                    }
                 ]
             )->find($request->id);
             return $this->makeResponse("Success", 200, "This Is Product Data", $product);
@@ -127,7 +132,7 @@ class ProductController extends Controller
     {
         try 
         {
-            $products = Product::select('id', 'AED', 'SAR', 'USD', 'quantity', 'imageUrl', 'department_id', 'admin_id')->with(
+            $products = Product::select('id', 'AED', 'SAR', 'USD', 'quantity', 'imageUrl', 'department_id', 'admin_id', 'unit_id')->with(
                 [
                     'admin' => function ($admin) 
                     {
@@ -144,7 +149,11 @@ class ProductController extends Controller
                             ]
                         );
                     },
-                    'translations'
+                    'translations',
+                    'unit' => function ($unit)
+                    {
+                        $unit->select('id')->with('translations');
+                    }
                 ]
             )->get();
             return $this->makeResponse("Success", 200, "This All Products", $products);
@@ -177,7 +186,11 @@ class ProductController extends Controller
                             ]
                         );
                     },
-                    'translations'
+                    'translations',
+                    'unit' => function ($unit)
+                    {
+                        $unit->with('translations');
+                    }
                 ]
             )->find($request->id);
             if (!empty($request->file('photo'))) 
@@ -205,7 +218,11 @@ class ProductController extends Controller
                             ]
                         );
                     },
-                    'translations'
+                    'translations',
+                    'unit' => function ($unit)
+                    {
+                        $unit->with('translations');
+                    }
                 ]
             );
             return $this->makeResponse("Success", 200, "Product Updated Successfully", $product);
