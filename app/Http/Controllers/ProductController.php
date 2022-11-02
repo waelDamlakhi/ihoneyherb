@@ -35,7 +35,7 @@ class ProductController extends Controller
                                         [
                                             'discount' => function ($discount)
                                             {
-                                                $discount->select('discount', 'department_id')->where(
+                                                $discount->selectRaw('discount * 100 AS discount ,department_id')->where(
                                                     [
                                                         ['end', '>=', Carbon::today()],
                                                         ['start', '<=', Carbon::today()]
@@ -105,7 +105,7 @@ class ProductController extends Controller
                             [
                                 'discount' => function ($discount)
                                 {
-                                    $discount->select('discount', 'department_id')->where(
+                                    $discount->selectRaw('discount * 100 AS discount ,department_id')->where(
                                         [
                                             ['end', '>=', Carbon::today()],
                                             ['start', '<=', Carbon::today()]
@@ -162,13 +162,14 @@ class ProductController extends Controller
                             [
                                 'discount' => function ($discount)
                                 {
-                                    $discount->select('discount', 'department_id')->where(
+                                    $discount->selectRaw('discount * 100 AS discount ,department_id')->where(
                                         [
                                             ['end', '>=', Carbon::today()],
                                             ['start', '<=', Carbon::today()]
                                         ]
                                     );
-                                }
+                                },
+                                'translations'
                             ]
                         );
                     },
@@ -183,8 +184,7 @@ class ProductController extends Controller
                         $unit->with('translations');
                     }
                 ]
-            )->find($request->id);
-            // ->withAvg('users AS rate', 'product_user.rate')
+            )->withAvg('users AS rate', 'product_user.rate')->find($request->id);
             return $this->makeResponse("Success", 200, "These Are Product Details", $products);
         }
         catch (Exception $e) 

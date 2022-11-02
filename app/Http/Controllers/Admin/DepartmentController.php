@@ -70,7 +70,7 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function read()
+    public function read(DepartmentRequest $request)
     {
         try 
         {
@@ -96,7 +96,7 @@ class DepartmentController extends Controller
                         $translation->select('name', 'department_id', 'locale');
                     }
                 ]
-            )->withCount('children AS hasChildren')->get();
+            )->withCount('children AS hasChildren')->paginate($request->limit);
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllDepartments'), $departments);
         }
         catch (Exception $e) 

@@ -59,14 +59,7 @@ class DepartmentDiscountController extends Controller
     {
         try 
         {
-            $departments = Department::select('id')->with(
-                [
-                    'translations' => function ($translation) 
-                    {
-                        $translation->select('name', 'department_id', 'locale');
-                    }
-                ]
-            )->whereHas('products')->get();
+            $departments = Department::select('id')->with('translations')->whereHas('products')->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllDepartments'), $departments);
         }
         catch (Exception $e) 
@@ -92,17 +85,10 @@ class DepartmentDiscountController extends Controller
                     }, 
                     'department' => function ($department) 
                     {
-                        $department->select('id')->with(
-                            [
-                                'translations' => function ($translation) 
-                                {
-                                    $translation->select('name', 'department_id', 'locale');
-                                }
-                            ]
-                        );
+                        $department->select('id')->with('translations');
                     }
                 ]
-            )->get();
+            )->selectRaw('*, IF(start < CURRENT_DATE, true, false) AS isStarted, discount * 100 AS discount')->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllDepartmentsDiscounts'), $departmentsDiscounts);
         }
         catch (Exception $e) 
@@ -124,18 +110,10 @@ class DepartmentDiscountController extends Controller
                 [ 
                     'department' => function ($department) 
                     {
-                        $department->select('id')->with(
-                            [
-                                'translations' => function ($translation) 
-                                {
-                                    $translation->select('name', 'department_id', 'locale');
-                                }
-                            ]
-                        );
+                        $department->select('id')->with('translations');
                     }
                 ]
-            )->find($request->id);
-            $departmentDiscount->discount *= 100;
+            )->selectRaw('*, IF(start < CURRENT_DATE, true, false) AS isStarted, discount * 100 AS discount')->find($request->id);
             return $this->makeResponse("Success", 200, __('CategoryLang.ThisIsDepartmentDiscountData'), $departmentDiscount);
         }
         catch (Exception $e) 
@@ -157,14 +135,7 @@ class DepartmentDiscountController extends Controller
                 [ 
                     'department' => function ($department) 
                     {
-                        $department->select('id')->with(
-                            [
-                                'translations' => function ($translation) 
-                                {
-                                    $translation->select('name', 'department_id', 'locale');
-                                }
-                            ]
-                        );
+                        $department->select('id')->with('translations');
                     }
                 ]
             )->find($request->id);
@@ -187,14 +158,7 @@ class DepartmentDiscountController extends Controller
                 [
                     'department' => function ($department) 
                     {
-                        $department->select('id')->with(
-                            [
-                                'translations' => function ($translation) 
-                                {
-                                    $translation->select('name', 'department_id', 'locale');
-                                }
-                            ]
-                        );
+                        $department->select('id')->with('translations');
                     }
                 ]
             );

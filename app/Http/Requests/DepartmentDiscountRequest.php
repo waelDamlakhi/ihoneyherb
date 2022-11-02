@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\DepartmentDiscount;
 use Illuminate\Support\Str;
 use App\Traits\GeneralFunctions;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,21 +29,31 @@ class DepartmentDiscountRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = array();
         if (Str::contains($this->path(), 'delete-department-discount') || Str::contains($this->path(), 'edit-department-discount')) 
         {
             $rules['id'] = 'required|integer|exists:department_discounts,id';
         }
         else 
         {
-            if (Str::contains($this->path(), 'update-department-discount'))
-                $rules['id'] = 'required|integer|exists:department_discounts,id';
-            $rules += [
+            $rules = [
                 'department_id' => 'required|integer|exists:departments,id',
                 'discount' => 'required|numeric|max:100',
-                'start' => 'required|date|after_or_equal:today',
                 'end' => 'required|date|after:start',
             ];
+            if (Str::contains($this->path(), 'update-department-discount'))
+            {
+                $departmentDiscount = DepartmentDiscount::selectRaw('IF(start < CURRENT_DATE, true, false) AS isStarted, start')->find($this->id);
+                $rules += [
+                    'id' => 'required|integer|exists:department_discounts,id',
+                    'start' => [
+                        'required',
+                        'date',
+                        is_object($departmentDiscount) ? ($departmentDiscount->isStarted ? 'date_equals:' . $departmentDiscount->start : 'after_or_equal:today') : ''
+                    ]
+                ];
+            }
+            else
+                $rules['start'] = 'required|date|after_or_equal:today';
         }
         return $rules;
     }
@@ -70,6 +81,7 @@ class DepartmentDiscountRequest extends FormRequest
             'end.required' => __('CategoryLang.TheEndDateFieldIsRequired'),
             'end.date' => __('CategoryLang.TheEndDateMustBeADate'),
             'start.after_or_equal' => __('CategoryLang.TheStartDateMustBeADateAfterOrEqualToToday'),
+            'start.date_equals' => __('CategoryLang.TheStartDateMustBeADateEqualTo:date'),
             'end.after' => __('CategoryLang.TheEndDateMustBeADateAfterStartDate')
         ];
     }

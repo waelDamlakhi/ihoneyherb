@@ -128,7 +128,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function read()
+    public function read(ProductRequest $request)
     {
         try 
         {
@@ -155,7 +155,7 @@ class ProductController extends Controller
                         $unit->select('id')->with('translations');
                     }
                 ]
-            )->get();
+            )->paginate($request->limit);
             return $this->makeResponse("Success", 200, "This All Products", $products);
         }
         catch (Exception $e) 

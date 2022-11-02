@@ -48,7 +48,15 @@ class UnitController extends Controller
     {
         try 
         {
-            $units = Unit::with('translations')->get();
+            $units = Unit::with(
+                [
+                    'translations',
+                    'admin' => function ($admin)
+                    {
+                        $admin->select('id', 'name');
+                    }
+                ]
+            )->get();
             return $this->makeResponse("Success", 200, __('UnitLang.TheseAreAllUnits'), $units);
         }
         catch (Exception $e) 

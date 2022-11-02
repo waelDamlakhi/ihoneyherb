@@ -48,6 +48,7 @@ return [
     'TheEndDateFieldIsRequired' => 'تاريخ النهاية مطلوب',
     'TheEndDateMustBeADate' => 'يجب أن يكون تاريخ النهاية من نوع تاريخ',
     'TheStartDateMustBeADateAfterOrEqualToToday' => 'يجب أن يكون تاريخ البداية أكبر أو يساوي تاريخ اليوم',
+    'TheStartDateMustBeADateEqualTo:date' => 'يجب أن يكون تاريخ البدء تاريخًا يساوي :date',
     'TheEndDateMustBeADateAfterStartDate' => 'يجب أن يكون تاريخ النهاية أكبر من تاريخ البداية',
     'TheLimitMustBeAInteger' => 'يجب أن يكون الحد عددًا صحيحًا',
     'TheseAreAllChildDepartments' => 'هذه هي جميع الأقسام الفرعية',

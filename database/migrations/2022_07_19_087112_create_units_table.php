@@ -15,6 +15,7 @@ class CreateUnitsTable extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('admin_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->enum('type', ['decimal', 'integer']);
         });
     }

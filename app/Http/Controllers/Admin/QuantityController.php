@@ -67,11 +67,15 @@ class QuantityController extends Controller
                     }, 
                     'product' => function ($product) 
                     {
-                        $product->select('id')->with(
+                        $product->select('id', 'unit_id')->with(
                             [
                                 'translations' => function ($translation) 
                                 {
                                     $translation->select('name', 'product_id', 'locale');
+                                },
+                                'unit' => function ($unit)
+                                {
+                                    $unit->select('id')->with('translations');
                                 }
                             ]
                         );

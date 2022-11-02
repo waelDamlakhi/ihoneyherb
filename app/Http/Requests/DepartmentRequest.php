@@ -31,7 +31,11 @@ class DepartmentRequest extends FormRequest
     {
         if (Str::contains($this->path(), 'admin/api')) 
         {
-            if (Str::contains($this->path(), 'delete-department') || Str::contains($this->path(), 'edit-department')) 
+            if (Str::contains($this->path(), 'departments')) 
+            {
+                $rules['limit'] = 'required|integer';
+            } 
+            elseif (Str::contains($this->path(), 'delete-department') || Str::contains($this->path(), 'edit-department')) 
             {
                 $rules['id'] = 'required|integer|exists:departments,id';
             }

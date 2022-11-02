@@ -23,7 +23,7 @@ class CategoryController extends Controller
     {
         try 
         {
-            $departmentsDiscount = DepartmentDiscount::select('discount', 'department_id')->with(
+            $departmentsDiscount = DepartmentDiscount::with(
                 [ 
                     'department' => function ($department) 
                     {
@@ -42,7 +42,7 @@ class CategoryController extends Controller
                     ['end', '>=', Carbon::today()],
                     ['start', '<=', Carbon::today()]
                 ]
-            )->get();
+            )->selectRaw('discount * 100 AS discount ,department_id')->get();
             return $this->makeResponse("Success", 200, __("CategoryLang.TheseAreAllCategoriesThatHaveADiscountToday"), $departmentsDiscount);
         }
         catch (Exception $e) 

@@ -48,6 +48,7 @@ return [
     'TheEndDateFieldIsRequired' => 'The End Date Field Is Required',
     'TheEndDateMustBeADate' => 'The End Date Must Be a Date',
     'TheStartDateMustBeADateAfterOrEqualToToday' => 'The Start Date Must Be A Date After Or Equal To Today',
+    'TheStartDateMustBeADateEqualTo:date' => 'The Start Date Must Be A Date Equal To :date',
     'TheEndDateMustBeADateAfterStartDate' => 'The End Date Must Be A Date After Start Date',
     'TheLimitMustBeAInteger' => 'The Limit Must Be A Integer',
     'TheseAreAllChildDepartments' => 'These Are All Child Departments',

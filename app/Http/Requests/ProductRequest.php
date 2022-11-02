@@ -32,7 +32,11 @@ class ProductRequest extends FormRequest
     {
         if (Str::contains($this->path(), 'admin/api')) 
         {
-            if (Str::contains($this->path(), 'delete-product') || Str::contains($this->path(), 'edit-product')) 
+            if (Str::contains($this->path(), 'products')) 
+            {
+                $rules['limit'] = 'required|integer';
+            } 
+            elseif (Str::contains($this->path(), 'delete-product') || Str::contains($this->path(), 'edit-product')) 
             {
                 $rules['id'] = 'required|integer|exists:products,id';
             }
@@ -60,14 +64,12 @@ class ProductRequest extends FormRequest
                 else
                 {
                     $unit = Unit::select('type')->find($this->unit_id);
-                    $type = is_object($unit) ? $unit->type : 'decimal';
                     $rules += [
                         'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png',
                         'otherPhoto.*' => 'mimetypes:image/jpg,image/jpeg,image/png',
                         'quantity' => [
                             'required',
-                            Rule::when($type == 'decimal', 'numeric'),
-                            Rule::when($type == 'integer', 'integer')
+                            is_object($unit) ? ($unit->type == 'decimal' ? 'numeric' : 'integer') : ''
                         ]
                     ];
                 }

@@ -75,6 +75,14 @@ class Admin extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get the Units for the Admin.
+     */
+    public function units()
+    {
+        return $this->hasMany(Unit::class);
+    }
+
+    /**
      * Get the Quantity Adjustments for the Admin.
      */
     public function quantityAdjustments()

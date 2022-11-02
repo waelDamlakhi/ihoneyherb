@@ -19,9 +19,10 @@ class Unit extends Model implements TranslatableContract
      * @var array<int, string>
      */
     protected $fillable = [
-        'type'
+        'type',
+        'admin_id'
     ];
-    protected $hidden = [];
+    protected $hidden = ['admin_id'];
     public $translatedAttributes = ['name'];
 
     /**
@@ -30,5 +31,13 @@ class Unit extends Model implements TranslatableContract
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+    
+    /**
+     * Get the Admin that owns the Unit.
+     */
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
     }
 }

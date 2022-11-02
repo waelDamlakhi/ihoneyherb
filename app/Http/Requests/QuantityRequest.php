@@ -9,6 +9,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Traits\GeneralFunctions;
+use Hamcrest\Type\IsObject;
 
 class QuantityRequest extends FormRequest
 {
@@ -54,8 +55,7 @@ class QuantityRequest extends FormRequest
                 'description' => 'nullable',
                 'quantity' => [
                     'required',
-                    Rule::when($product->unit->type == 'decimal', 'numeric'),
-                    Rule::when($product->unit->type == 'integer', 'integer')
+                    is_object($product) ? ($product->unit->type == 'decimal' ? 'numeric' : 'integer') : ''
                 ]
             ];
         }
