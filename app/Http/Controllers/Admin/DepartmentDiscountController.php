@@ -162,6 +162,7 @@ class DepartmentDiscountController extends Controller
                     }
                 ]
             );
+            $departmentDiscount->discount *= 100;
             return $this->makeResponse("Success", 200, __('CategoryLang.DepartmentDiscountUpdatedSuccessfully'), $departmentDiscount);
         }
         catch (Exception $e) 

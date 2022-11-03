@@ -31,6 +31,7 @@ return [
     'ThisUserNameHasAlreadyBeenTaken' => 'اسم المستخدم محجوز مسبقا',
     'ThePasswordFieldIsRequired' => 'كلمة المرور مطلوبة',
     'ThePasswordMustBeAString' => 'يجب أن تكون كلمة المرور نصية',
+    'ThePasswordMustBeAtLeast8Characters' => 'يجب ألا تقل كلمة المرور عن 8 أحرف',
     'TheNameFieldIsRequired' => 'الاسم مطلوب',
     'TheNameMustBeAString' => 'يجب أن يكون الاسم نصي',
     'TheEmailAddressFieldIsRequired' => 'البريد الالكتروني مطلوب',
@@ -40,5 +41,7 @@ return [
     'ThePhoneMustBeANumeric' => 'يجب أن يكون الهاتف رقمي',
     'TheAddressFieldIsRequired' => 'العنوان مطلوب',
     'TheAddressMustBeAString' => 'يجب أن يكون العنوان نصي',
+    'UnAuthenticated' => 'غير مصدق',
+    'PasswordChangedSuccessfully' => 'تم تغيير الرقم السري بنجاح',
 
 ];

@@ -31,6 +31,7 @@ return [
     'ThisIdIsInvalid' => 'هذا الرقم غير صحيح',
     'ThePhotoExtensionMustBeOneOfThese(jpg,jpeg,png)' => '(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
     'TheCategoryPhotoFieldIsRequired' => 'صورة التصنيف مطلوبة',
+    'TheCategoryIdFieldIsRequired' => 'رقم التصنيف مطلوب',
     'TheCategoryIdMustBeAInteger' => 'يجب أن يكون رقم التصنيف من نوع رقم صحيح',
     'ThisCategoryIdIsInvalid' => 'هذا الرقم غير صحيح',
     'TheEnglishCategoryNameFieldIsRequired' => 'اسم التصنيف بالأنكليزية مطلوب',

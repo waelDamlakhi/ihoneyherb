@@ -31,6 +31,7 @@ return [
     'ThisUserNameHasAlreadyBeenTaken' => 'This User Name Has Already Been Taken',
     'ThePasswordFieldIsRequired' => 'The Password Field Is Required',
     'ThePasswordMustBeAString' => 'The Password Must Be A String',
+    'ThePasswordMustBeAtLeast8Characters' => 'The Password Must Be At Least 8 Characters',
     'TheNameFieldIsRequired' => 'The Name Field Is Required',
     'TheNameMustBeAString' => 'The Name Must Be A String',
     'TheEmailAddressFieldIsRequired' => 'The Email Address Field Is Required',
@@ -40,5 +41,7 @@ return [
     'ThePhoneMustBeANumeric' => 'The Phone Must Be A Numeric',
     'TheAddressFieldIsRequired' => 'The Address Field Is Required',
     'TheAddressMustBeAString' => 'The Address Must Be A String',
+    'UnAuthenticated' => 'UnAuthenticated',
+    'PasswordChangedSuccessfully' => 'Password Changed Successfully',
 
 ];

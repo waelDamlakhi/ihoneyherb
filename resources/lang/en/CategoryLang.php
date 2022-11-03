@@ -31,6 +31,7 @@ return [
     'ThisIdIsInvalid' => 'This Id Is Invalid',
     'ThePhotoExtensionMustBeOneOfThese(jpg,jpeg,png)' => 'The Photo Extension Must Be One Of These (jpg, jpeg, png)',
     'TheCategoryPhotoFieldIsRequired' => 'The Category Photo Field Is Required',
+    'TheCategoryIdFieldIsRequired' => 'The Category Id Field Is Required',
     'TheCategoryIdMustBeAInteger' => 'The Category Id Must Be A Integer',
     'ThisCategoryIdIsInvalid' => 'This Category Id Is Invalid',
     'TheEnglishCategoryNameFieldIsRequired' => 'The English Category Name Field Is Required',

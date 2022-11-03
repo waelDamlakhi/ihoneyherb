@@ -22,34 +22,28 @@ class TokenAuth  extends BaseMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        auth()->shouldUse($guard == null ? 'admin-api' : $guard);
         try 
         {
-            if (!$user = Auth::guard($guard == null ? 'admin-api' : $guard)->user()) 
+            $user = null;
+            $guards = is_null($guard) ? array_keys(array_slice(config('auth.guards'), 0, count(config('auth.guards')) - 1)) : array($guard);
+            foreach ($guards as $guardType)
             {
-                if($guard == null) 
+                auth()->shouldUse($guardType);
+                if ($user = Auth::guard($guardType)->user())
                 {
-                    auth()->shouldUse('user-api');
-                    if (!$user = Auth::guard('user-api')->user())
-                    {
-                        throw new JWTException('UnAuthenticated', 403);
-                    }
-                    else
-                    {
-                        $guard = 'user-api';
-                    }
-                }
-                else
-                {
-                    throw new JWTException('UnAuthenticated', 403);
+                    $guard = $guardType;
+                    break;
                 }
             }
-            else
+            if (!$user)
+                throw new JWTException(__('AuthLang.UnAuthenticated'), 403);
+            if (Route::getCurrentRoute()->getActionMethod() != 'update' || $guard != 'admin-api') 
             {
-                if ($guard == null) 
-                {
-                    $guard = 'admin-api';
-                }
+                $request->request->add([
+                    $guard == 'admin-api' ? 'admin_id' : 'user_id' => $user['id'],
+                    'guard' => $guard,
+                    'user' => $user
+                ]);
             }
         } 
         catch (TokenExpiredException $e) 
@@ -59,13 +53,6 @@ class TokenAuth  extends BaseMiddleware
         catch (JWTException $e) 
         {
             return $this->makeResponse("Failed",  $e->getCode(), $e->getMessage());
-        }
-        if (Route::getCurrentRoute()->getActionMethod() != 'update' || $guard != 'admin-api') 
-        {
-            $request->request->add([
-                $guard == 'admin-api' ? 'admin_id' : 'user_id' => $user['id'],
-                'guard' => $guard
-            ]);
         }
         return $next($request);
     }

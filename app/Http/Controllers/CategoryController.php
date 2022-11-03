@@ -60,7 +60,9 @@ class CategoryController extends Controller
     {
         try 
         {
-            $departments = Department::select('id', 'imageUrl')->withCount(['children AS childCount'])->with('translations')->where('department_id', null)->limit($request->limit)->get();
+            $departments = Department::select('id', 'imageUrl')->withCount(['children AS childCount'])
+            ->with('translations')->where('department_id', null)->limit($request->limit)
+            ->has('children')->orHas('products')->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllPrimaryDepartments'), $departments);
         }
         catch (Exception $e) 
@@ -74,11 +76,12 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getChildCategories()
+    public function getChildCategories(DepartmentRequest $request)
     {
         try 
         {
-            $departments = Department::select('id', 'imageUrl')->with('translations')->where('department_id', '!=', null)->get();
+            $departments = Department::select('id', 'imageUrl')->with('translations')
+            ->where('department_id', $request->department_id)->has('products')->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllChildDepartments'), $departments);
         }
         catch (Exception $e) 

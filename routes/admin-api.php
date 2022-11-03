@@ -22,7 +22,15 @@ use App\Http\Controllers\Admin\UnitController;
 |
 */
 
-Route::post('login', [AuthController::class, 'login']);
+
+Route::controller(AuthController::class)->group(function ()
+{
+    Route::middleware(['tokenAuth:admin-api'])->group(function () 
+    {
+        Route::put('change-password', 'changePassword');
+    });
+    Route::post('login', 'login');
+});
 
 Route::controller(UnitController::class)->group(function ()
 {

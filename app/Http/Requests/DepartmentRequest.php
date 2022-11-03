@@ -61,7 +61,14 @@ class DepartmentRequest extends FormRequest
         }
         else
         {
-            $rules['limit'] = 'nullable|integer';
+            if (Str::contains($this->path(), 'parent-categories'))
+            {
+                $rules['limit'] = 'nullable|integer';
+            }
+            else 
+            {
+                $rules['department_id'] = 'required|integer|exists:departments,id';
+            }
         }
 
         return $rules;
@@ -81,6 +88,7 @@ class DepartmentRequest extends FormRequest
             'id.exists' => __('CategoryLang.ThisIdIsInvalid'),
             'photo.mimetypes' => __('CategoryLang.ThePhotoExtensionMustBeOneOfThese(jpg,jpeg,png)'),
             'photo.required' => __('CategoryLang.TheCategoryPhotoFieldIsRequired'),
+            'department_id.required' => __('CategoryLang.TheCategoryIdFieldIsRequired'),
             'department_id.integer' => __('CategoryLang.TheCategoryIdMustBeAInteger'),
             'department_id.exists' => __('CategoryLang.ThisCategoryIdIsInvalid'),
             'en.name.required' => __('CategoryLang.TheEnglishCategoryNameFieldIsRequired'),

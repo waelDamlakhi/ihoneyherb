@@ -32,10 +32,13 @@ class QuantityRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = array();
         if (Str::contains($this->path(), 'delete-quantityAdjustmentOperation') || Str::contains($this->path(), 'edit-quantityAdjustmentOperation')) 
         {
             $rules['id'] = 'required|integer|exists:quantity_adjustments,id';
+        }
+        elseif (Str::contains($this->path(), 'quantityAdjustmentOperations'))
+        {
+            $rules['limit'] = 'required|integer';
         }
         else 
         {
@@ -47,9 +50,7 @@ class QuantityRequest extends FormRequest
                     }
                 ]
             )->find($this->product_id);
-            if (Str::contains($this->path(), 'update-quantityAdjustmentOperation'))
-                $rules['id'] = 'required|integer|exists:quantity_adjustments,id';
-            $rules += [
+            $rules = [
                 'product_id' => 'required|integer|exists:products,id',
                 'operation_type' => 'required|in:out,in',
                 'description' => 'nullable',
@@ -58,6 +59,8 @@ class QuantityRequest extends FormRequest
                     is_object($product) ? ($product->unit->type == 'decimal' ? 'numeric' : 'integer') : ''
                 ]
             ];
+            if (Str::contains($this->path(), 'update-quantityAdjustmentOperation'))
+                $rules['id'] = 'required|integer|exists:quantity_adjustments,id';
         }
         return $rules;
     }

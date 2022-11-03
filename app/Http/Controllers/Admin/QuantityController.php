@@ -55,7 +55,7 @@ class QuantityController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function read()
+    public function read(QuantityRequest $request)
     {
         try 
         {
@@ -81,7 +81,7 @@ class QuantityController extends Controller
                         );
                     }
                 ]
-            )->get();
+            )->paginate($request->limit);
             return $this->makeResponse("Success", 200, "This All Quantity Adjustment Operations", $quantityAdjustment);
         }
         catch (Exception $e) 

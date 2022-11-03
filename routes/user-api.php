@@ -20,10 +20,14 @@ use App\Http\Controllers\User\ProductController;
 
 Route::controller(AuthController::class)->group(function ()
 {
+    Route::middleware(['tokenAuth:user-api'])->group(function () 
+    {
+        Route::put('verify-email', 'verifyEmail');
+        Route::get('resend-email-verify-code', 'reSendEmailVerifyCode');
+        Route::put('change-password', 'changePassword');
+    });
     Route::post('login', 'login');
     Route::post('register', 'register');
-    Route::put('verify-email', 'verifyEmail');
-    Route::get('resend-email-verify-code', 'reSendEmailVerifyCode');
 });
 
 Route::controller(PhoneController::class)->group(function ()

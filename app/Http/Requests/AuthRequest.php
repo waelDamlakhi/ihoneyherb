@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Validation\Validator;
 use App\Traits\GeneralFunctions;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AuthRequest extends FormRequest
 {
@@ -28,19 +29,48 @@ class AuthRequest extends FormRequest
      */
     public function rules()
     {
-        return Str::contains($this->path(), 'login') ? 
-        [
-            'userName' => 'required|string',
-            'password' => 'required|string',
-        ] : 
-        [
-            'name' => 'required|string',
-            'userName' => 'required|string|unique:users,userName',
-            'password' => 'required|string|min:8',
-            'email' => 'required|email|unique:users,email',
-            'tel' => 'required|numeric',
-            'address' => 'required|string',
-        ];
+        $rules = array();
+        if (Str::contains($this->path(), 'login')) 
+            $rules = [
+                'userName' => 'required|string',
+                'password' => 'required|string',
+            ];
+        elseif (Str::contains($this->path(), 'register'))
+            $rules = [
+                'name' => 'required|string',
+                'userName' => 'required|string|unique:users,userName',
+                'password' => 'required|string|min:8',
+                'email' => 'required|email|unique:users,email',
+                'tel' => 'required|numeric',
+                'address' => 'required|string',
+            ];
+        elseif (Str::contains($this->path(), 'change-password')) 
+        {
+            $rules['password'] = 'required|string|min:8';
+        }
+        elseif (Str::contains($this->path(), 'forget-password')) 
+            $rules['email'] = [
+                'required',
+                'email',
+                function ($attribute, $value, $fail) 
+                {
+                    $guards = array_slice(config('auth.guards'), 0, count(config('auth.guards')) - 1);
+                    foreach ($guards as $guard => $attributes)
+                        if ($user = DB::table($attributes['provider'])->where('email', $value)->first())
+                        {
+                            $this->merge(
+                                [
+                                    'guard' => $guard,
+                                    'user' => $user
+                                ]
+                            );
+                            break;
+                        }
+                    if (!$user)
+                        $fail(__('AuthLang.ThisEmailIsNotExist'));
+                }
+            ];
+        return $rules;
     }
     
     /**
@@ -56,6 +86,7 @@ class AuthRequest extends FormRequest
             'userName.unique' => __("AuthLang.ThisUserNameHasAlreadyBeenTaken"),
             'password.required' => __("AuthLang.ThePasswordFieldIsRequired"),
             'password.string' => __("AuthLang.ThePasswordMustBeAString"),
+            'password.min' => __("AuthLang.ThePasswordMustBeAtLeast8Characters"),
             'name.required' => __("AuthLang.TheNameFieldIsRequired"),
             'name.string' => __("AuthLang.TheNameMustBeAString"),
             'email.required' => __("AuthLang.TheEmailAddressFieldIsRequired"),
