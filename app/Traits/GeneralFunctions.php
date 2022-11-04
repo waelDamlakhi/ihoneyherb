@@ -46,10 +46,15 @@ trait GeneralFunctions {
         *** Function Send mails From The Server ***
         ********************************************
     */
-    public function sendMail($email, $view, $data)
+    public function sendMail($email, $subject, $view, $data = array(), $from = array())
     {
         try 
         {
+            if (COUNT($from) == 0)
+                $from = [
+                    'email' => env('MAIL_USERNAME'),
+                    'name' => env('MAIL_FROM_NAME')
+                ];
             //Load Composer's autoloader
             require base_path("vendor/autoload.php");
     
@@ -64,12 +69,12 @@ trait GeneralFunctions {
             $mail->Password = env('MAIL_PASSWORD');       // sender password
             $mail->SMTPSecure = env('MAIL_ENCRYPTION');                  // encryption - ssl/tls
             $mail->Port = env('MAIL_PORT', 587);
-            $mail->setFrom(env('MAIL_USERNAME'), env('MAIL_FROM_NAME'));
+            $mail->setFrom($from['email'], $from['name']);
             $mail->addAddress($email); 
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = $data['subject'];
+            $mail->Subject = $subject;
             $mail->Body = view($view, $data);
             $mail->send();
             return true;

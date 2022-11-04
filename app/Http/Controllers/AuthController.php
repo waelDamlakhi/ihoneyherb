@@ -37,9 +37,8 @@ class AuthController extends Controller
         try 
         {
             $guard = $request->path() == 'admin/api/login' ? 'admin-api' : 'user-api';
-            $token = Auth::guard($guard)->attempt($request->only(['userName', 'password']));
-            if (!$token)
-                return $this->makeResponse('Failed', 403, __("AuthLang.AccessDenied"));
+            if (!$token = Auth::guard($guard)->attempt($request->only(['userName', 'password'])))
+                throw new Exception(__('AuthLang.AccessDenied'), 401);
             if ($guard == 'admin-api') 
                 $data = [
                     'Token' => 'Bearer ' . $token,
@@ -70,9 +69,9 @@ class AuthController extends Controller
         {
             $credentials = $request->only(['userName', 'password']);
             $emailCode = random_int(100000, 999999);
-            $response = $this->sendMail($request->email, "emailVerificationCode", ['subject' => 'Email Verification Code', 'name' => $request->name, 'code' => $emailCode]);
+            $response = $this->sendMail($request->email, 'Email Verification Code', "emailVerificationCode", ['name' => $request->name, 'code' => $emailCode]);
             if (is_object($response))
-                return $this->makeResponse('Failed', $response->getCode(), $response->getMessage());
+                throw new Exception($response->getMessage(), $response->getCode());
             $request->merge(
                 [
                     'password' => bcrypt($request->password),
@@ -150,7 +149,7 @@ class AuthController extends Controller
             if ($request->user->codeExpirationDate >= Carbon::now()) 
                 throw new Exception(__('AuthLang.VerificationCodeHasNotExpired'), 422);
             $emailCode = random_int(100000, 999999);
-            $response = $this->sendMail($request->user->email, "emailVerificationCode", ['subject' => 'Email Verification Code', 'name' => $request->user->name, 'code' => $emailCode]);
+            $response = $this->sendMail($request->user->email, 'Email Verification Code', "emailVerificationCode", ['name' => $request->user->name, 'code' => $emailCode]);
             if (is_object($response))
                 return $this->makeResponse('Failed', $response->getCode(), $response->getMessage());
             $request->merge(
@@ -197,7 +196,7 @@ class AuthController extends Controller
         try 
         {
             $token = Auth::guard($request->guard)->setTTL(4)->tokenById($request->user->id);
-            $response = $this->sendMail($request->email, "forgetPassword", ['subject' => 'Forget Your Password', 'name' => $request->user->name, 'token' => $token]);
+            $response = $this->sendMail($request->email, 'Forget Your Password', "forgetPassword", ['name' => $request->user->name, 'token' => $token]);
             if (is_object($response))
                 throw new Exception($response->getMessage(), $response->getCode());
             return $this->makeResponse('Success', 200, __("AuthLang.TheSpecifiedMailHasBeenContactedPleaseCheckYourInbox"));

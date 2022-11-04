@@ -48,4 +48,6 @@ Route::controller(ProductController::class)->group(function ()
 Route::controller(SocialMediaController::class)->group(function ()
 {
     Route::get('follow-us', 'getFollowUs');
+    Route::get('contact-us', 'getContactUs');
+    Route::post('send-message', 'sendMessage');
 });

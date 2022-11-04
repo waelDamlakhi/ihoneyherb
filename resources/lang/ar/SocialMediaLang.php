@@ -32,5 +32,12 @@ return [
     'ThisIsSocialMediaData' => 'هذه بيانات وسيلة التواصل',
     'SocialMediaUpdatedSuccessfully' => 'تم تحديث وسيلة التواصل بنجاح',
     'SocialMediaDeletedSuccessfully' => 'تم حذف وسيلة التواصل بنجاح',
+    'TheNameFieldIsRequired' => 'حقل الاسم مطلوب',
+    'TheNameMustBeAString' => 'يجب أن يكون الاسم من نوع نصي',
+    'TheEmailFieldIsRequired' => 'حقل البريد الإلكتروني مطلوب',
+    'TheEmailMustBeAEmailAddress' => 'يجب أن يكون البريد الإلكتروني عنوان بريد إلكتروني',
+    'TheMessageFieldIsRequired' => 'حقل الرسالة مطلوب',
+    'TheMessageMustBeAString' => 'يجب أن تكون الرسالة من نوع نصي',
+    'MessageSentSuccessfully' => 'تم إرسال الرسالة بنجاح'
 
 ];

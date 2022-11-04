@@ -41,14 +41,6 @@
         </div>
         <div class="main-el">
             @yield('content')
-            <p style="color: #777">Thank you for using our website.</p>
-            <p style="color: #777">Regards,</p>
-            <p style="color: #777">{{ env('APP_WEBSITE') }}</p>
-            <hr style="margin: 1.5rem 0">
-            <p style="color: #777">
-                if you're having trouble, 
-                <a href={{ env('APP_WEBSITE') . '/contact' }} class="link-el">Contact US</a>
-            </p>
         </div>
     </div>
 </body>

@@ -29,31 +29,42 @@ class SocialMediaRequest extends FormRequest
      */
     public function rules()
     {
-        if (Str::contains($this->path(), 'delete-socialMedia') || Str::contains($this->path(), 'edit-socialMedia')) 
+        if (Str::contains($this->path(), 'admin/api')) 
         {
-            $rules['id'] = 'required|integer|exists:social_media,id';
+            if (Str::contains($this->path(), 'delete-socialMedia') || Str::contains($this->path(), 'edit-socialMedia')) 
+            {
+                $rules['id'] = 'required|integer|exists:social_media,id';
+            }
+            else 
+            {
+                if (Str::contains($this->path(), 'update-socialMedia'))
+                    $rules = [
+                        'id' => 'required|integer|exists:social_media,id',
+                        'photoName' => 'nullable|string'
+                    ];
+                else
+                    $rules['photoName'] = 'required_without:photo|string';
+                $rules += [
+                    'photo' => 'nullable|mimetypes:image/svg',
+                    'type' => 'required|string|in:tel,email,application',
+                    'info' => [
+                        'required',
+                        Rule::when($this->type === 'tel', 'numeric'),
+                        Rule::when($this->type === 'email', 'email'),
+                        Rule::when($this->type === 'application', 'string'),
+                        Rule::unique('social_media')->where(function ($query) {
+                            return $query->where(['type' => $this->type, 'info' => $this->info]);
+                        })->ignore($this->id)
+                    ]
+                ];
+            }
         }
         else 
         {
-            if (Str::contains($this->path(), 'update-socialMedia'))
-                $rules = [
-                    'id' => 'required|integer|exists:social_media,id',
-                    'photoName' => 'nullable|string'
-                ];
-            else
-                $rules['photoName'] = 'required_without:photo|string';
-            $rules += [
-                'photo' => 'nullable|mimetypes:image/svg',
-                'type' => 'required|string|in:tel,email,application',
-                'info' => [
-                    'required',
-                    Rule::when($this->type === 'tel', 'numeric'),
-                    Rule::when($this->type === 'email', 'email'),
-                    Rule::when($this->type === 'application', 'string'),
-                    Rule::unique('social_media')->where(function ($query) {
-                        return $query->where(['type' => $this->type, 'info' => $this->info]);
-                    })->ignore($this->id)
-                ]
+            $rules = [
+                'name' => 'required|string',
+                'email' => 'required|email',
+                'message' => 'required|string'
             ];
         }
 
@@ -82,7 +93,13 @@ class SocialMediaRequest extends FormRequest
             'info.numeric' => __('SocialMediaLang.TheSocialMediaustBeANumeric'),
             'info.email' => __('SocialMediaLang.TheSocialMediaMustBeAEmailAddress'),
             'info.string' => __('SocialMediaLang.TheSocialMediaMustBeAString'),
-            'info.unique' => __('SocialMediaLang.TheSocialMediaHasAlreadyBeenTaken')
+            'info.unique' => __('SocialMediaLang.TheSocialMediaHasAlreadyBeenTaken'),
+            'name.required' => __('SocialMediaLang.TheNameFieldIsRequired'),
+            'name.string' => __('SocialMediaLang.TheNameMustBeAString'),
+            'email.required' => __('SocialMediaLang.TheEmailFieldIsRequired'),
+            'email.unique' => __('SocialMediaLang.TheEmailMustBeAEmailAddress'),
+            'message.required' => __('SocialMediaLang.TheMessageFieldIsRequired'),
+            'message.string' => __('SocialMediaLang.TheMessageMustBeAString'),
         ];
     }
 

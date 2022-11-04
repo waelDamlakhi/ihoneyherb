@@ -32,5 +32,11 @@ return [
     'ThisIsSocialMediaData' => 'This Is Social Media Data',
     'SocialMediaUpdatedSuccessfully' => 'Social Media Updated Successfully',
     'SocialMediaDeletedSuccessfully' => 'Social Media Deleted Successfully',
-
+    'TheNameFieldIsRequired' => 'The Name Field Is Required',
+    'TheNameMustBeAString' => 'The Name Must Be A String',
+    'TheEmailFieldIsRequired' => 'The Email Field Is Required',
+    'TheEmailMustBeAEmailAddress' => 'The Email Must Be A Email Address',
+    'TheMessageFieldIsRequired' => 'The Message Field Is Required',
+    'TheMessageMustBeAString' => 'The Message Must Be A String',
+    'MessageSentSuccessfully' => 'Message Sent Successfully'
 ];
