@@ -61,8 +61,14 @@ class CategoryController extends Controller
         try 
         {
             $departments = Department::select('id', 'imageUrl')->withCount(['children AS childCount'])
-            ->with('translations')->where('department_id', null)->limit($request->limit)
-            ->has('children')->orHas('products')->get();
+            ->with('translations')->limit($request->limit)->has('children')
+            ->orWhereHas(
+                'products',
+                function ($products)
+                {
+                    $products->where('departments.department_id', null);
+                }
+            )->get();
             return $this->makeResponse("Success", 200, __('CategoryLang.TheseAreAllPrimaryDepartments'), $departments);
         }
         catch (Exception $e) 

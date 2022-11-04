@@ -32,7 +32,7 @@ class ProductController extends Controller
         {
             $product = Product::with('users')->find($request->product_id);
             $product->users()->syncWithoutDetaching([$request->user_id => ['rate' => $request->rate, 'comment' => $request->comment]]);
-            return $this->makeResponse("Success", 200, "Comment Added Successfully", ['user_id' => $request->user_id]);
+            return $this->makeResponse("Success", 200, "Comment Added Successfully", ['user_id' => $request->user_id, 'name' => $request->user->name]);
         }
         catch (Exception $e) 
         {
