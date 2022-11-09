@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SocialMediaController;
 
 /*
@@ -50,4 +51,9 @@ Route::controller(SocialMediaController::class)->group(function ()
     Route::get('follow-us', 'getFollowUs');
     Route::get('contact-us', 'getContactUs');
     Route::post('send-message', 'sendMessage');
+});
+
+Route::controller(BranchController::class)->group(function ()
+{
+    Route::get('branches', 'getBranches');
 });

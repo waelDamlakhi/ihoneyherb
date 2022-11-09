@@ -23,7 +23,7 @@ return [
     'TheSocialMediaTypeMustBeAString' => 'The Social Media Type Must Be A String',
     'TheSocialMediaTypeMustBeOneOfThese(tel,email,application)' => 'The Social Media Type Must Be One Of These (tel, email, application)',
     'TheSocialMediaFieldIsRequired' => 'The Social Media Field Is Required',
-    'TheSocialMediaustBeANumeric' => 'The Social Media Must Be A Numeric',
+    'TheSocialMediaustBeAInteger' => 'The Social Media Must Be A Integer',
     'TheSocialMediaMustBeAEmailAddress' => 'The Social Media Must Be A Email Address',
     'TheSocialMediaMustBeAString' => 'The Social Media Must Be A String',
     'TheSocialMediaHasAlreadyBeenTaken' => 'The Social Media Has Already Been Taken',

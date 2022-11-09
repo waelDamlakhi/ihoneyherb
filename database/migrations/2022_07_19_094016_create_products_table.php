@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->float('USD', 8, 2);
             $table->float('SAR', 8, 2);
             $table->float('quantity', 8, 2);
+            $table->float('weight', 8, 2);
             $table->string('imageUrl');
             $table->string('imagePath');
         });

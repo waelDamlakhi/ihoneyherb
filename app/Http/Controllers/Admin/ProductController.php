@@ -10,7 +10,6 @@ use App\Traits\GeneralFunctions;
 use App\Models\QuantityAdjustments;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Models\Unit;
 
 class ProductController extends Controller
 {
@@ -94,18 +93,11 @@ class ProductController extends Controller
     {
         try 
         {
-            $product = Product::select('id', 'AED', 'quantity', 'imageUrl', 'department_id', 'unit_id')->with(
+            $product = Product::select('id', 'AED', 'quantity', 'weight', 'imageUrl', 'department_id', 'unit_id')->with(
                 [
                     'department' => function ($department)
                     {
-                        $department->select('id')->with(
-                            [
-                                'translations' => function ($translation) 
-                                {
-                                    $translation->select('name', 'department_id', 'locale');
-                                }
-                            ]
-                        );
+                        $department->select('id')->with('translations');
                     },
                     'translations',
                     'pictures',
@@ -132,7 +124,7 @@ class ProductController extends Controller
     {
         try 
         {
-            $products = Product::select('id', 'AED', 'SAR', 'USD', 'quantity', 'imageUrl', 'department_id', 'admin_id', 'unit_id')->with(
+            $products = Product::select('id', 'AED', 'SAR', 'USD', 'quantity', 'weight', 'imageUrl', 'department_id', 'admin_id', 'unit_id')->with(
                 [
                     'admin' => function ($admin) 
                     {
@@ -140,14 +132,7 @@ class ProductController extends Controller
                     }, 
                     'department' => function ($department)
                     {
-                        $department->select('id')->with(
-                            [
-                                'translations' => function ($translation) 
-                                {
-                                    $translation->select('name', 'department_id', 'locale');
-                                }
-                            ]
-                        );
+                        $department->select('id')->with('translations');
                     },
                     'translations',
                     'unit' => function ($unit)
@@ -177,14 +162,7 @@ class ProductController extends Controller
                 [
                     'department' => function ($department)
                     {
-                        $department->select('id')->with(
-                            [
-                                'translations' => function ($translation) 
-                                {
-                                    $translation->select('name', 'department_id', 'locale');
-                                }
-                            ]
-                        );
+                        $department->select('id')->with('translations');
                     },
                     'translations',
                     'unit' => function ($unit)
@@ -209,14 +187,7 @@ class ProductController extends Controller
                 [
                     'department' => function ($department)
                     {
-                        $department->select('id')->with(
-                            [
-                                'translations' => function ($translation) 
-                                {
-                                    $translation->select('name', 'department_id', 'locale');
-                                }
-                            ]
-                        );
+                        $department->select('id')->with('translations');
                     },
                     'translations',
                     'unit' => function ($unit)

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BranchController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DepartmentController;
@@ -39,6 +40,15 @@ Route::controller(UnitController::class)->group(function ()
     Route::get('edit-unit', 'edit');
     Route::post('update-unit', 'update');
     Route::delete('delete-unit', 'delete');
+});
+
+Route::controller(BranchController::class)->group(function ()
+{
+    Route::post('create-branch', 'create');
+    Route::get('branches', 'read');
+    Route::get('edit-branch', 'edit');
+    Route::put('update-branch', 'update');
+    Route::delete('delete-branch', 'delete');
 });
 
 Route::controller(DepartmentController::class)->group(function ()

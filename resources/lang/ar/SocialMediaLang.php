@@ -23,7 +23,7 @@ return [
     'TheSocialMediaTypeMustBeAString' => 'يجب أن يكون نوع وسيلة التواصل من نوع نصي',
     'TheSocialMediaTypeMustBeOneOfThese(tel,email,application)' => 'يجب أن يكون نوع وسيلة التواصل احدى هذه الأنواع (هاتف, بريد الكتروني, تطبيق)',
     'TheSocialMediaFieldIsRequired' => 'وسيلة التواصل مطلوبة',
-    'TheSocialMediaustBeANumeric' => 'يجب أن تكون وسيلة التواصل من نوع رقمي',
+    'TheSocialMediaustBeAInteger' => 'يجب أن تكون وسيلة التواصل من نوع رقمي',
     'TheSocialMediaMustBeAEmailAddress' => 'يجب أن تكون وسيلة التواصل من نوع بريد الكتروني',
     'TheSocialMediaMustBeAString' => 'يجب أن تكون وسيلة التواصل من نوع نصي',
     'TheSocialMediaHasAlreadyBeenTaken' => 'وسيلة التواصل موجودة مسبقا',

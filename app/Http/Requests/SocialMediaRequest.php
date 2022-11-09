@@ -49,7 +49,7 @@ class SocialMediaRequest extends FormRequest
                     'type' => 'required|string|in:tel,email,application',
                     'info' => [
                         'required',
-                        Rule::when($this->type === 'tel', 'numeric'),
+                        Rule::when($this->type === 'tel', 'integer'),
                         Rule::when($this->type === 'email', 'email'),
                         Rule::when($this->type === 'application', 'string'),
                         Rule::unique('social_media')->where(function ($query) {
@@ -90,7 +90,7 @@ class SocialMediaRequest extends FormRequest
             'type.string' => __('SocialMediaLang.TheSocialMediaTypeMustBeAString'),
             'type.in' => __('SocialMediaLang.TheSocialMediaTypeMustBeOneOfThese(tel,email,application)'),
             'info.required' => __('SocialMediaLang.TheSocialMediaFieldIsRequired'),
-            'info.numeric' => __('SocialMediaLang.TheSocialMediaustBeANumeric'),
+            'info.integer' => __('SocialMediaLang.TheSocialMediaustBeAInteger'),
             'info.email' => __('SocialMediaLang.TheSocialMediaMustBeAEmailAddress'),
             'info.string' => __('SocialMediaLang.TheSocialMediaMustBeAString'),
             'info.unique' => __('SocialMediaLang.TheSocialMediaHasAlreadyBeenTaken'),

@@ -23,6 +23,7 @@ class Product extends Model implements TranslatableContract
         'USD',
         'SAR',
         'quantity',
+        'weight',
         'imageUrl', 
         'imagePath',
         'admin_id',

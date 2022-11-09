@@ -46,6 +46,7 @@ class ProductRequest extends FormRequest
                     'AED' => 'required|numeric',
                     'department_id' => 'nullable|integer|exists:departments,id',
                     'unit_id' => 'required|integer|exists:units,id',
+                    'weight' => 'required|numeric'
                 ];
                 foreach (config('translatable.locales') as $lang) 
                     $rules += [

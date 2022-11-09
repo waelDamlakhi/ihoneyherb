@@ -232,7 +232,7 @@ class AuthController extends Controller
             $user->password = bcrypt($request->password);
             $user->save();
             auth()->logout();
-            $data['Token'] = Auth::guard($request->guard)->login($user);
+            $data['Token'] = 'Bearer ' . Auth::guard($request->guard)->login($user);
             return $this->makeResponse('Success', 200, __("AuthLang.PasswordChangedSuccessfully"), $data);
         } 
         catch (Exception $e) 
