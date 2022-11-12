@@ -7,9 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use App\Traits\GeneralFunctions;
-use Hamcrest\Type\IsObject;
 
 class QuantityRequest extends FormRequest
 {
@@ -42,21 +40,14 @@ class QuantityRequest extends FormRequest
         }
         else 
         {
-            $product = Product::select('id')->with(
-                [
-                    'unit' => function ($unit)
-                    {
-                        $unit->select('type');
-                    }
-                ]
-            )->find($this->product_id);
+            $product = Product::with('unit')->find($this->product_id);
             $rules = [
                 'product_id' => 'required|integer|exists:products,id',
                 'operation_type' => 'required|in:out,in',
                 'description' => 'nullable',
                 'quantity' => [
                     'required',
-                    is_object($product) ? ($product->unit->type == 'decimal' ? 'numeric' : 'integer') : ''
+                    !is_null($product) ? ($product->unit->type == 'decimal' ? 'numeric' : 'integer') : ''
                 ]
             ];
             if (Str::contains($this->path(), 'update-quantityAdjustmentOperation'))
@@ -65,6 +56,30 @@ class QuantityRequest extends FormRequest
         return $rules;
     }
     
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'limit.integer' => __('ProductLang.ThelimitMustBeAnInteger'),
+            'limit.required' => __('ProductLang.ThelimitFieldIsRequired'),
+            'id.required' => __('ProductLang.TheIdFieldIsRequired'),
+            'id.integer' => __('ProductLang.TheIdMustBeAnInteger'),
+            'id.exists' => __('ProductLang.ThisIdIsInvalid'),
+            'product_id.required' => __('ProductLang.TheProductIdFieldIsRequired'),
+            'product_id.integer' => __('ProductLang.TheProductIdMustBeAnInteger'),
+            'product_id.exists' => __('ProductLang.ThisProductIdIsInvalid'),
+            'quantity.required' => __('ProductLang.TheQuantityFieldIsRequired'),
+            'quantity.integer' => __('ProductLang.TheQuantityMustBeAnInteger'),
+            'quantity.numeric' => __('ProductLang.TheQuantityMustBeANumeric'),
+            'operation_type.in' => __('ProductLang.TheSelectedOperationTypeIsInvalid'),
+            'operation_type.required' => __('ProductLang.TheOperationTypeFieldIsRequired'),
+        ];
+    }
+
     /**
      * Return Validation Error Messages.
      *

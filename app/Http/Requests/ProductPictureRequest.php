@@ -59,26 +59,15 @@ class ProductPictureRequest extends FormRequest
      */
     public function messages()
     {
-        return app()->getLocale() == 'en' ? 
-        [
-            'id.required' => 'The Id Field Is Required.',
-            'id.integer' => 'The Id Must Be a Integer.',
-            'id.exists' => 'This Id Is Invalid.',
-            'product_id.required' => 'The Product Id Field Is Required.',
-            'product_id.integer' => 'The Product Id Must Be a Integer.',
-            'product_id.exists' => 'This Product Id Is Invalid.',
-            'mimetypes' => 'The :attribute Extension Must Be One Of These (jpg, jpeg, png).',
-            'photo.required' => 'The Product Photo Field Is Required.'
-        ] : 
-        [
-            'id.required' => 'رقم المعرف مطلوب.',
-            'id.integer' => 'يجب أن يكون رقم المعرف من نوع رقم صحيح.',
-            'id.exists' => 'هذا الرقم غير صحيح.',
-            'product_id.required' => 'رقم المنتج مطلوب.',
-            'product_id.integer' => 'يجب أن يكون رقم المنتج من نوع رقم صحيح.',
-            'product_id.exists' => 'هذا الرقم غير صحيح.',
-            'mimetypes' => '.(jpg, jpeg, png) يجب أن يكون امتداد الصورة احدى هذه الامتدادات',
-            'photo.required' => 'صورة المننج مطلوبة.'
+        return [
+            'id.required' => __('ProductLang.TheIdFieldIsRequired'),
+            'id.integer' => __('ProductLang.TheIdMustBeAnInteger'),
+            'id.exists' => __('ProductLang.ThisIdIsInvalid'),
+            'product_id.required' => __('ProductLang.TheProductIdFieldIsRequired'),
+            'product_id.integer' => __('ProductLang.TheProductIdMustBeAnInteger'),
+            'product_id.exists' => __('ProductLang.ThisProductIdIsInvalid'),
+            'mimetypes' => __('ProductLang.The:attributeExtensionMustBeOneOfThese(jpg,jpeg,png)'),
+            'photo.required' => __('ProductLang.TheProductPhotoFieldIsRequired'),
         ];
     }
     

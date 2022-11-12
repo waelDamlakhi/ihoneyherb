@@ -41,7 +41,7 @@ class ProductController extends Controller
                     }
                 ]
             )->whereDoesntHave('children')->get();
-            return $this->makeResponse("Success", 200, "This All Departments", $departments);
+            return $this->makeResponse("Success", 200, __('ProductLang.TheseAreAllDepartments'), $departments);
         }
         catch (Exception $e) 
         {
@@ -76,7 +76,7 @@ class ProductController extends Controller
             }
             $request->request->add(['product_id' => $product->id, 'description' => 'بداية الكمية']);
             QuantityAdjustments::create($request->all());
-            return $this->makeResponse("Success", 200, "Product Added Successfully");
+            return $this->makeResponse("Success", 200, __('ProductLang.ProductAddedSuccessfully'));
         }
         catch (Exception $e) 
         {
@@ -107,7 +107,7 @@ class ProductController extends Controller
                     }
                 ]
             )->find($request->id);
-            return $this->makeResponse("Success", 200, "This Is Product Data", $product);
+            return $this->makeResponse("Success", 200, __('ProductLang.ThisIsProductData'), $product);
         }
         catch (Exception $e) 
         {
@@ -141,7 +141,7 @@ class ProductController extends Controller
                     }
                 ]
             )->paginate($request->limit);
-            return $this->makeResponse("Success", 200, "This All Products", $products);
+            return $this->makeResponse("Success", 200, __('ProductLang.TheseAreAllProducts'), $products);
         }
         catch (Exception $e) 
         {
@@ -196,7 +196,7 @@ class ProductController extends Controller
                     }
                 ]
             );
-            return $this->makeResponse("Success", 200, "Product Updated Successfully", $product);
+            return $this->makeResponse("Success", 200, __('ProductLang.ProductUpdatedSuccessfully'), $product);
         }
         catch (Exception $e) 
         {
@@ -220,7 +220,7 @@ class ProductController extends Controller
             }
             unlink($product->imagePath);
             $product->delete();
-            return $this->makeResponse("Success", 200, "Product Deleted Successfully");
+            return $this->makeResponse("Success", 200, __('ProductLang.ProductDeletedSuccessfully'));
         }
         catch (Exception $e) 
         {

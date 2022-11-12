@@ -23,7 +23,7 @@ class AddressController extends Controller
     }
     
     /**
-     * Create A New Phone Number.
+     * Create A New Address.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -42,7 +42,7 @@ class AddressController extends Controller
     }
     
     /**
-     * Get All phones.
+     * Get All Address.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -60,7 +60,7 @@ class AddressController extends Controller
     }
     
     /**
-     * Get Phone Data For Edit It.
+     * Get Address Data For Edit It.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -78,7 +78,7 @@ class AddressController extends Controller
     }
     
     /**
-     * Update Phone.
+     * Update Address.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -97,7 +97,7 @@ class AddressController extends Controller
     }
     
     /**
-     * Delete Phone.
+     * Delete Address.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -107,7 +107,7 @@ class AddressController extends Controller
         {
             $address = Address::where('user_id', $request->user_id)->find($request->id);
             if ($address->type == 'default') 
-                return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? 'Can Not Delete Default Address': "لا يمكن حذف العنوان الافتراضي");
+                throw new Exception(app()->getLocale() == 'en' ? 'Can Not Delete Default Address': "لا يمكن حذف العنوان الافتراضي", 422);
             $address->delete();
             return $this->makeResponse("Success", 200, "Address deleted Successfully");
         }
@@ -118,7 +118,7 @@ class AddressController extends Controller
     }
     
     /**
-     * Set Phone As Default.
+     * Set Address As Default.
      *
      * @return \Illuminate\Http\JsonResponse
      */

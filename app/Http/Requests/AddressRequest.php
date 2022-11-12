@@ -52,11 +52,11 @@ class AddressRequest extends FormRequest
                     [
                         'required',
                         'string',
-                        Rule::unique('addresses', 'tel')->ignore($this->id)
+                        Rule::unique('addresses', 'address')->ignore($this->id)
                     ]
                 ];
             else
-                $rules['address'] = 'required|string|unique:addresses,tel';
+                $rules['address'] = 'required|string|unique:addresses,address';
         }
 
         return $rules;

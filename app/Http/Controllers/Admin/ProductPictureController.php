@@ -34,7 +34,7 @@ class ProductPictureController extends Controller
             {
                 $productPictures[] = ProductPicture::create(array_merge(['product_id' => $request->product_id], $this->uploadFiles($photo)));
             }
-            return $this->makeResponse("Success", 200, "Product Picture Added Successfully", $productPictures);
+            return $this->makeResponse("Success", 200, __('ProductLang.ProductPictureAddedSuccessfully'), $productPictures);
         }
         catch (Exception $e) 
         {
@@ -55,7 +55,7 @@ class ProductPictureController extends Controller
             unlink($productPicture->imagePath);
             $request->request->add($this->uploadFiles($request->file('photo')));
             $productPicture->update($request->all());
-            return $this->makeResponse("Success", 200, "Product Picture Updated Successfully", $productPicture);
+            return $this->makeResponse("Success", 200, __('ProductLang.ProductPictureUpdatedSuccessfully'), $productPicture);
         }
         catch (Exception $e) 
         {
@@ -75,7 +75,7 @@ class ProductPictureController extends Controller
             $productPicture = ProductPicture::find($request->id);
             unlink($productPicture->imagePath);
             $productPicture->delete();
-            return $this->makeResponse("Success", 200, "Product Picture Deleted Successfully");
+            return $this->makeResponse("Success", 200, __('ProductLang.ProductPictureDeletedSuccessfully'));
         }
         catch (Exception $e) 
         {

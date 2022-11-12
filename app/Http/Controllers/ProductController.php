@@ -54,7 +54,7 @@ class ProductController extends Controller
                     }
                 ]
             )->get();
-            return $this->makeResponse("Success", 200, "These Are All Products Banners", $productsBanners);
+            return $this->makeResponse("Success", 200, __('ProductLang.TheseAreAllProductsBanners'), $productsBanners);
         }
         catch (Exception $e) 
         {
@@ -79,7 +79,7 @@ class ProductController extends Controller
                     }
                 ]
             )->whereTranslationLike('name', '%' . $request->search . '%')->get();
-            return $this->makeResponse("Success", 200, "These Are All Products You Are Looking For", $products);
+            return $this->makeResponse("Success", 200, __('ProductLang.TheseAreAllProductsYouAreLookingFor'), $products);
         }
         catch (Exception $e) 
         {
@@ -96,7 +96,7 @@ class ProductController extends Controller
     {
         try 
         {
-            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id')
+            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'weight', 'quantity', 'department_id', 'unit_id')
             ->with(
                 [
                     'department' => function ($department)
@@ -118,6 +118,10 @@ class ProductController extends Controller
                     'translations' => function ($translation) 
                     {
                         $translation->select('name', 'product_id', 'locale');
+                    },
+                    'unit' => function ($unit) 
+                    {
+                        $unit->select('id')->with('translations');
                     }
                 ]
             )
@@ -136,7 +140,7 @@ class ProductController extends Controller
                 }
             )
             ->orderby($request->sort, $request->order)->paginate($request->limit);
-            return $this->makeResponse("Success", 200, "These Are All Products", $products);
+            return $this->makeResponse("Success", 200, __('ProductLang.TheseAreAllProducts'), $products);
         }
         catch (Exception $e) 
         {
@@ -153,7 +157,7 @@ class ProductController extends Controller
     {
         try 
         {
-            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'quantity', 'department_id', 'unit_id')
+            $products = Product::select('id', 'AED', 'SAR', 'USD', 'imageUrl', 'weight', 'quantity', 'department_id', 'unit_id')
             ->with(
                 [
                     'department' => function ($department)
@@ -185,7 +189,7 @@ class ProductController extends Controller
                     }
                 ]
             )->withAvg('users AS rate', 'product_user.rate')->find($request->id);
-            return $this->makeResponse("Success", 200, "These Are Product Details", $products);
+            return $this->makeResponse("Success", 200, __('ProductLang.TheseAreProductDetails'), $products);
         }
         catch (Exception $e) 
         {

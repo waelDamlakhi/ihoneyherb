@@ -39,10 +39,10 @@ class QuantityController extends Controller
                 if ($product->quantity >= $request->quantity)
                     $product->quantity -= $request->quantity;
                 else
-                    return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? "There Is Not Enough Quantity" : 'لا توجد كمية كافية');
+                    throw new Exception(__('ProductLang.ThereIsNotEnoughQuantity'), 422);
             $product->save();
             QuantityAdjustments::create($request->all());
-            return $this->makeResponse("Success", 200, "Quantity Adjustment Operation Added Successfully");
+            return $this->makeResponse("Success", 200, __('ProductLang.QuantityAdjustmentOperationAddedSuccessfully'));
         }
         catch (Exception $e) 
         {
@@ -82,7 +82,7 @@ class QuantityController extends Controller
                     }
                 ]
             )->paginate($request->limit);
-            return $this->makeResponse("Success", 200, "This All Quantity Adjustment Operations", $quantityAdjustment);
+            return $this->makeResponse("Success", 200, __('ProductLang.TheseAreAllQuantityAdjustmentOperations'), $quantityAdjustment);
         }
         catch (Exception $e) 
         {
@@ -114,7 +114,7 @@ class QuantityController extends Controller
                     }
                 ]
             )->find($request->id);
-            return $this->makeResponse("Success", 200, "This Is Quantity Adjustment Operation Data", $quantityAdjustment);
+            return $this->makeResponse("Success", 200, __('ProductLang.ThisIsQuantityAdjustmentOperationData'), $quantityAdjustment);
         }
         catch (Exception $e) 
         {
@@ -139,7 +139,7 @@ class QuantityController extends Controller
                     }
                 ]
             )->get();
-            return $this->makeResponse("Success", 200, "This All Products", $products);
+            return $this->makeResponse("Success", 200, __('ProductLang.TheseAreAllProducts'), $products);
         }
         catch (Exception $e) 
         {
@@ -188,7 +188,7 @@ class QuantityController extends Controller
                 if ($product->quantity >= $request->quantity)
                     $product->quantity -= $request->quantity;
                 else
-                    return $this->makeResponse("Faild", 422, app()->getLocale() == 'en' ? "There Is Not Enough Quantity" : 'لا توجد كمية كافية');
+                    throw new Exception(__('ProductLang.ThereIsNotEnoughQuantity'), 422);
             if ($product != $oldProduct)
                 $oldProduct->save();
             $product->save();
@@ -208,7 +208,7 @@ class QuantityController extends Controller
                     }
                 ]
             );
-            return $this->makeResponse("Success", 200, "Quantity Adjustment Operation Updated Successfully", $quantityAdjustment);
+            return $this->makeResponse("Success", 200, __('ProductLang.QuantityAdjustmentOperationUpdatedSuccessfully'), $quantityAdjustment);
         }
         catch (Exception $e) 
         {
@@ -233,7 +233,7 @@ class QuantityController extends Controller
                 $product->quantity += $quantityAdjustment->quantity;
             $product->save();
             $quantityAdjustment->delete();
-            return $this->makeResponse("Success", 200, "Quantity Adjustment Operation Deleted Successfully");
+            return $this->makeResponse("Success", 200, __('ProductLang.QuantityAdjustmentOperationDeletedSuccessfully'));
         }
         catch (Exception $e) 
         {
